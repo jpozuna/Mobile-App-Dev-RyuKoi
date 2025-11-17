@@ -4,6 +4,7 @@
 //
 //  Created by Joshua Paulino Ozuna on 11/15/25.
 //
+//ADD- imagery for each martial art and ig for the levels as well. expand the container size and make it more boxy than pill
 // MARK: - PreferenceViewController.swift
 import UIKit
 class PreferenceViewController: UIViewController {

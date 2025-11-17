@@ -23,8 +23,8 @@ class PreferenceView: UIView {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Preference Screen"
-        label.font = UIFont.systemFont(ofSize: 28, weight: .light)
+        label.text = "Starting Base"
+        label.font = UIFont.systemFont(ofSize: 20, weight: .light)
         label.textColor = .lightGray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

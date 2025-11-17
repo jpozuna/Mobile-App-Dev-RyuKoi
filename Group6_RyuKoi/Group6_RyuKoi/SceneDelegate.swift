@@ -19,8 +19,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let nav = UINavigationController(rootViewController: signInScreen)
         
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = nav
-        window?.makeKeyAndVisible()
+        //window?.rootViewController = nav
+        //window?.makeKeyAndVisible()
+        //Bypass login to test LessonView
+        window?.rootViewController = LessonViewController()
+            
+            window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
