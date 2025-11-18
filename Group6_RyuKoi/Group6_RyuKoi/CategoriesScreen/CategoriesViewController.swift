@@ -11,6 +11,9 @@ class CategoriesViewController: UIViewController {
     let categoriesScreen = CategoriesView()
     let navBar = TopNavigationBarView()
     
+    //MARK: list to display the category names in the TableView...
+    let categoryNames = ["Taekwondo", "Karate", "Boxing", "Jujutsu", "Other"]
+    
     override func loadView() {
         view = categoriesScreen
     }
@@ -35,5 +38,24 @@ class CategoriesViewController: UIViewController {
     @objc func openProfile() {
         let profileVC = ProfileViewController()
         navigationController?.pushViewController(profileVC, animated: true)
+    }
+}
+
+extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return categoryNames.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "categories", for: indexPath) as! CategoriesTableViewCell
+        cell.categoryLabel.text = categoryNames[indexPath.row]
+        return cell
+    }
+    
+    //MARK: deal with user interaction with a cell...
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let homeController = HomeViewController()
+        homeController.receivedCategory = self.categoryNames[indexPath.row]
+        navigationController?.pushViewController(homeController, animated: true)
     }
 }
