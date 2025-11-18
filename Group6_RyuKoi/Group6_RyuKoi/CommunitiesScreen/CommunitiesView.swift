@@ -41,7 +41,9 @@ class CommunitiesView: UIView {
         tableViewEvents = UITableView()
         tableViewEvents.register(CommunitiesTableViewCell.self, forCellReuseIdentifier: "events")
         tableViewEvents.translatesAutoresizingMaskIntoConstraints = false
-        contentWrapper.addSubview(tableViewEvents)
+        tableViewEvents.backgroundColor = .clear
+
+        self.addSubview(tableViewEvents)
     }
     
     func setupRect() {
@@ -65,14 +67,15 @@ class CommunitiesView: UIView {
     
     func initConstraints(){
         NSLayoutConstraint.activate([
+            /*
             //MARK: contentWrapper constraints...
             contentWrapper.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
             contentWrapper.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
             contentWrapper.widthAnchor.constraint(equalTo:self.safeAreaLayoutGuide.widthAnchor),
             contentWrapper.heightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.heightAnchor),
-            
+            */
             // MARK: category background ...
-            titleBackground.topAnchor.constraint(equalTo: contentWrapper.topAnchor, constant: 24),
+            titleBackground.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor), // may have to change??
             titleBackground.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             titleBackground.heightAnchor.constraint(equalToConstant: 60),
             titleBackground.widthAnchor.constraint(equalToConstant: 220),
@@ -86,9 +89,9 @@ class CommunitiesView: UIView {
             subLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
             tableViewEvents.topAnchor.constraint(equalTo: subLabel.bottomAnchor, constant: 10),
-            tableViewEvents.leadingAnchor.constraint(equalTo: contentWrapper.leadingAnchor, constant: 8),
-            tableViewEvents.trailingAnchor.constraint(equalTo: contentWrapper.trailingAnchor, constant: -8),
-            tableViewEvents.bottomAnchor.constraint(equalTo: contentWrapper.bottomAnchor, constant: -8)
+            tableViewEvents.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 8),
+            tableViewEvents.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -8),
+            tableViewEvents.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -8)
         ])
     }
     

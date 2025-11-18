@@ -16,14 +16,15 @@ class CategoriesTableViewCell: UITableViewCell {
         setupWrapperCellView()
         categoryLabel = setupLabel()
         categoryLabel.font = UIFont.boldSystemFont(ofSize: 30)
-        
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+
         initConstraints()
     }
     
     func setupWrapperCellView(){
         wrapperCellView = UITableViewCell()
         wrapperCellView.backgroundColor = UIColor(red: 0.72, green: 0.21, blue: 0.055, alpha: 0.67)
-        wrapperCellView.layer.borderWidth = 1 // may be subject to change
         wrapperCellView.layer.cornerRadius = 10 // may also be subject to changes
         //adding shadow to the cells
         wrapperCellView.layer.shadowColor = UIColor.gray.cgColor
@@ -51,10 +52,10 @@ class CategoriesTableViewCell: UITableViewCell {
             
             categoryLabel.centerYAnchor.constraint(equalTo: wrapperCellView.centerYAnchor),
             categoryLabel.centerXAnchor.constraint(equalTo: wrapperCellView.centerXAnchor),
-            categoryLabel.heightAnchor.constraint(equalTo: wrapperCellView.heightAnchor, constant: -20),//maybe subject to change
-            categoryLabel.widthAnchor.constraint(equalTo: wrapperCellView.heightAnchor, constant: -20), // width or height anchor....?? check back in later
+            categoryLabel.leadingAnchor.constraint(greaterThanOrEqualTo: wrapperCellView.leadingAnchor, constant: 16),
+            categoryLabel.trailingAnchor.constraint(lessThanOrEqualTo: wrapperCellView.trailingAnchor, constant: -16),// anchor....?? check back in later
             
-            wrapperCellView.heightAnchor.constraint(equalToConstant: 104) // change to 104?
+            wrapperCellView.heightAnchor.constraint(equalToConstant: 80) //smaller?
         ])
     }
     

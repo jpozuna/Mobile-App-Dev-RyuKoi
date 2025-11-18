@@ -24,8 +24,11 @@ class CategoriesViewController: UIViewController {
         navBar.translatesAutoresizingMaskIntoConstraints = false
         navigationItem.hidesBackButton = true
         
+        // remove separator line between cells
+        categoriesScreen.tableViewCategories.separatorStyle = .none
+        
         NSLayoutConstraint.activate([
-            navBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            navBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 35), //????
             navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             navBar.heightAnchor.constraint(equalToConstant: 60)
@@ -33,6 +36,10 @@ class CategoriesViewController: UIViewController {
         
         
         navBar.account.addTarget(self, action: #selector(openProfile), for: .touchUpInside)
+        
+        //MARK: patching the table view delegate and datasource to controller...
+        categoriesScreen.tableViewCategories.delegate = self
+        categoriesScreen.tableViewCategories.dataSource = self
     }
     
     @objc func openProfile() {
