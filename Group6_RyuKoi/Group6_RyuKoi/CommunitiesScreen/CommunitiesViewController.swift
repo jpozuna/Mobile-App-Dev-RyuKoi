@@ -12,7 +12,7 @@ import UIKit
 class CommunitiesViewController: UIViewController {
     let communitiesScreen = CommunitiesView()
     let navBar = TopNavigationBarView()
-    let events = ["event", "event", "event", "event"]
+    let events = ["event", "event", "event", "event", "event", "event"]
     
     override func loadView() {
         view = communitiesScreen
@@ -24,8 +24,11 @@ class CommunitiesViewController: UIViewController {
         navBar.translatesAutoresizingMaskIntoConstraints = false
         navigationItem.hidesBackButton = true
         
+        // remove separator line between cells
+        communitiesScreen.tableViewEvents.separatorStyle = .none
+        
         NSLayoutConstraint.activate([
-            navBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            navBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 35),
             navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             navBar.heightAnchor.constraint(equalToConstant: 60)
@@ -33,6 +36,10 @@ class CommunitiesViewController: UIViewController {
         
         
         navBar.account.addTarget(self, action: #selector(openProfile), for: .touchUpInside)
+        
+        //MARK: patching the table view delegate and datasource to controller...
+        communitiesScreen.tableViewEvents.delegate = self
+        communitiesScreen.tableViewEvents.dataSource = self
     }
     
     @objc func openProfile() {

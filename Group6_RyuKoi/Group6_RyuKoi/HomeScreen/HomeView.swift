@@ -41,7 +41,9 @@ class HomeView: UIView {
         tableViewLessons = UITableView()
         tableViewLessons.register(HomeTableViewCell.self, forCellReuseIdentifier: "lessons")
         tableViewLessons.translatesAutoresizingMaskIntoConstraints = false
-        contentWrapper.addSubview(tableViewLessons)
+        tableViewLessons.backgroundColor = .clear
+
+        self.addSubview(tableViewLessons)
     }
     
     func setupRect() {
@@ -65,14 +67,15 @@ class HomeView: UIView {
     
     func initConstraints(){
         NSLayoutConstraint.activate([
+            /*
             //MARK: contentWrapper constraints...
             contentWrapper.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
             contentWrapper.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
             contentWrapper.widthAnchor.constraint(equalTo:self.safeAreaLayoutGuide.widthAnchor),
-            contentWrapper.heightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.heightAnchor),
+            contentWrapper.heightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.heightAnchor),*/
             
             // MARK: category background ...
-            categoryBackground.topAnchor.constraint(equalTo: contentWrapper.topAnchor, constant: 24),
+            categoryBackground.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
             categoryBackground.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             categoryBackground.heightAnchor.constraint(equalToConstant: 60),
             categoryBackground.widthAnchor.constraint(equalToConstant: 220),
@@ -86,9 +89,9 @@ class HomeView: UIView {
             subLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
             tableViewLessons.topAnchor.constraint(equalTo: subLabel.bottomAnchor, constant: 10),
-            tableViewLessons.leadingAnchor.constraint(equalTo: contentWrapper.leadingAnchor, constant: 8),
-            tableViewLessons.trailingAnchor.constraint(equalTo: contentWrapper.trailingAnchor, constant: -8),
-            tableViewLessons.bottomAnchor.constraint(equalTo: contentWrapper.bottomAnchor, constant: -8) // maybe!
+            tableViewLessons.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 8),
+            tableViewLessons.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -8),
+            tableViewLessons.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -8) // maybe!
         ])
     }
     
