@@ -11,8 +11,10 @@ class CommunitiesView: UIView {
     //MARK: scrollview for scrolling???
     var contentWrapper:UIScrollView!
     
+    var navBar: TopNavigationBarView!
+    
     //MARK: tableView for events...
-    var tableViewEvents: UITableView!
+    var collectionViewEvents: UICollectionView!
     
     var titleBackground: UIView! // to be under the category label?
     var eventLabel: UILabel!
@@ -23,7 +25,8 @@ class CommunitiesView: UIView {
         backgroundColor = UIColor(red: 1.0, green: 0.953, blue: 0.851, alpha: 1.0)
 
         setupContentWrapper()
-        setupTableViewEvents()
+        setupNavBar()
+        setupCollectionView()
         setupRect()
         eventLabel = setupLabel("Events", 30)
         subLabel = setupLabel("In the community", 16)
@@ -37,13 +40,23 @@ class CommunitiesView: UIView {
         self.addSubview(contentWrapper)
     }
     
-    func setupTableViewEvents(){
-        tableViewEvents = UITableView()
-        tableViewEvents.register(CommunitiesTableViewCell.self, forCellReuseIdentifier: "events")
-        tableViewEvents.translatesAutoresizingMaskIntoConstraints = false
-        tableViewEvents.backgroundColor = .clear
-
-        self.addSubview(tableViewEvents)
+    func setupNavBar() {
+        navBar = TopNavigationBarView()
+        navBar.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(navBar)
+    }
+    
+    func setupCollectionView(){
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        
+        collectionViewEvents = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionViewEvents.translatesAutoresizingMaskIntoConstraints = false
+        collectionViewEvents.backgroundColor = .clear
+        collectionViewEvents.register(CommunitiesEventCell.self, forCellWithReuseIdentifier: "CommunityEventCell")
+        self.addSubview(collectionViewEvents)
     }
     
     func setupRect() {
@@ -74,11 +87,18 @@ class CommunitiesView: UIView {
             contentWrapper.widthAnchor.constraint(equalTo:self.safeAreaLayoutGuide.widthAnchor),
             contentWrapper.heightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.heightAnchor),
             */
+            
+            navBar.topAnchor.constraint(equalTo: self.topAnchor ,constant: 70),
+            navBar.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            navBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            navBar.heightAnchor.constraint(equalToConstant: 60),
+            
             // MARK: category background ...
-            titleBackground.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor), // may have to change??
+            titleBackground.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 10), // may have to change??
             titleBackground.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            titleBackground.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            titleBackground.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             titleBackground.heightAnchor.constraint(equalToConstant: 60),
-            titleBackground.widthAnchor.constraint(equalToConstant: 220),
 
             // MARK: category label ...
             eventLabel.centerXAnchor.constraint(equalTo: titleBackground.centerXAnchor),
@@ -88,12 +108,18 @@ class CommunitiesView: UIView {
             subLabel.topAnchor.constraint(equalTo: titleBackground.bottomAnchor, constant: 8),
             subLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
-            tableViewEvents.topAnchor.constraint(equalTo: subLabel.bottomAnchor, constant: 10),
-            tableViewEvents.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 8),
-            tableViewEvents.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -8),
-            tableViewEvents.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -8)
+            collectionViewEvents.topAnchor.constraint(equalTo: subLabel.bottomAnchor, constant: 10),
+            collectionViewEvents.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 8),
+            collectionViewEvents.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -8),
+            collectionViewEvents.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -8)
         ])
     }
+    
+    func setAccountTarget(_ target: Any?, action: Selector) {
+        navBar.account.addTarget(target, action: action, for: .touchUpInside)
+    }
+    
+    
     
     //MARK: initializing constraints...
     required init?(coder: NSCoder) {

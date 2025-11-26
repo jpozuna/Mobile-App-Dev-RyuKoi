@@ -26,9 +26,8 @@ class SignInViewController: UIViewController {
     }
     
     @objc func handleSignIn() {
-        let preferenceScreen = PreferenceViewController()
-        navigationController?.pushViewController(preferenceScreen, animated: true)
-
+        let categoriesScreen = CategoriesViewController()
+        navigationController?.pushViewController(categoriesScreen, animated: true)
     }
     
     @objc func handleLogin() {

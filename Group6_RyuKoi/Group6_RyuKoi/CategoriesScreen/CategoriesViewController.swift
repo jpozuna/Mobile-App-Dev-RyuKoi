@@ -8,43 +8,44 @@
 import UIKit
 
 class CategoriesViewController: UIViewController {
-    let categoriesScreen = CategoriesView()
-    let navBar = TopNavigationBarView()
-    
     //MARK: list to display the category names in the TableView...
     let categoryNames = ["Taekwondo", "Karate", "Boxing", "Jujutsu", "Other"]
+    let categoriesScreen = CategoriesView()
     
     override func loadView() {
         view = categoriesScreen
     }
     
+    // help with the navBar Layout
+    //    override func viewWillAppear(_ animated: Bool) {
+    //        super.viewWillAppear(animated)
+    //        navigationController?.setNavigationBarHidden(true, animated: animated)
+    //    }
+    
+    //    override func viewWillDisappear(_ animated: Bool) {
+    //        super.viewWillDisappear(animated)
+    //        navigationController?.setNavigationBarHidden(false, animated: animated)
+    //    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(navBar)
-        navBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationController?.navigationBar.isHidden = true
         navigationItem.hidesBackButton = true
+        navigationItem.largeTitleDisplayMode = .never
         
         // remove separator line between cells
         categoriesScreen.tableViewCategories.separatorStyle = .none
         
-        NSLayoutConstraint.activate([
-            navBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 35), //????
-            navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            navBar.heightAnchor.constraint(equalToConstant: 60)
-        ])
-        
-        
-        navBar.account.addTarget(self, action: #selector(openProfile), for: .touchUpInside)
-        
         //MARK: patching the table view delegate and datasource to controller...
         categoriesScreen.tableViewCategories.delegate = self
         categoriesScreen.tableViewCategories.dataSource = self
+        
+        categoriesScreen.setAccountTarget(self, action: #selector(openProfile))
     }
     
     @objc func openProfile() {
-        let profileVC = ProfileViewController()
-        navigationController?.pushViewController(profileVC, animated: true)
+        let profileScreen = ProfileViewController()
+        navigationController?.pushViewController(profileScreen, animated: true)
     }
 }
 

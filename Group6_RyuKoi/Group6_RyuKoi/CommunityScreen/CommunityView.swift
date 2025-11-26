@@ -8,6 +8,7 @@
 import UIKit
 
 class CommunityView: UIView {
+    var backBtn: UIButton!
     var navBar: TopNavigationBarView!
     var eventNameContainer: UIView!
     var eventName: UILabel!
@@ -22,6 +23,7 @@ class CommunityView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor(red: 1.0, green: 0.953, blue: 0.851, alpha: 1.0)
+        setupBackBtn()
         setupNavBar()
         setupEventNameContainer()
         setupEventName()
@@ -33,6 +35,14 @@ class CommunityView: UIView {
         setupSendBtn()
         setupMessage()
         initConstraints()
+    }
+    
+    func setupBackBtn() {
+        backBtn = UIButton()
+        backBtn.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        backBtn.tintColor = .label
+        backBtn.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(backBtn)
     }
     
     func setupNavBar() {
@@ -127,9 +137,13 @@ class CommunityView: UIView {
     
     func initConstraints() {
         NSLayoutConstraint.activate([
-            navBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            navBar.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            backBtn.topAnchor.constraint(equalTo: self.topAnchor, constant: 80),
+            backBtn.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            
+            //navBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor ,constant: 20),
+            navBar.leadingAnchor.constraint(equalTo: backBtn.trailingAnchor),
             navBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            navBar.centerYAnchor.constraint(equalTo: backBtn.centerYAnchor),
             navBar.heightAnchor.constraint(equalToConstant: 60),
             
             eventNameContainer.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 10),
@@ -182,7 +196,6 @@ class CommunityView: UIView {
         navBar.account.addTarget(target, action: action, for: .touchUpInside)
     }
 
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

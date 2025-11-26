@@ -22,6 +22,12 @@ class CommunityViewController: UIViewController {
         
         communityScreen.commentsTableView.dataSource = self
         communityScreen.commentsTableView.delegate = self
+        
+        communityScreen.backBtn.addTarget(self, action: #selector(backBtnTapped), for: .touchUpInside)
+    }
+    
+    @objc func backBtnTapped(){
+        navigationController?.popViewController(animated: true)
     }
 
     @objc func openProfile() {

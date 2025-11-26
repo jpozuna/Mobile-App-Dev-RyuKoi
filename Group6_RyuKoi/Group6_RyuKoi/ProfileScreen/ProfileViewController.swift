@@ -18,18 +18,25 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.hidesBackButton = true
         
-        profileScreen.preferencesCollectionView.dataSource = self
-        profileScreen.preferencesCollectionView.delegate = self
+//        profileScreen.preferencesCollectionView.dataSource = self
+//        profileScreen.preferencesCollectionView.delegate = self
         
         profileScreen.notificationTableView.dataSource = self
         profileScreen.notificationTableView.delegate = self
         
         profileScreen.backBtn.addTarget(self, action: #selector(backBtnTapped), for: .touchUpInside)
+        profileScreen.logout.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
     }
     
     @objc func backBtnTapped(){
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func logoutTapped(){
+        let loginScreen = LoginViewController()
+        navigationController?.pushViewController(loginScreen, animated: true)
     }
 }
 
@@ -51,39 +58,39 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
     }
 }
 
-extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    var samplePreferences: [String] {
-        return ["Wrestle", "Karate", "Takewondo"]
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return samplePreferences.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "token",
-            for: indexPath
-        ) as! PreferenceTokenCellCollectionViewCell
-        
-        cell.label.text = samplePreferences[indexPath.row]
-        return cell
-    }
-    
-    // Optional: dynamic token sizing
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let label = UILabel()
-        label.text = samplePreferences[indexPath.row]
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        label.sizeToFit()
-        
-        return CGSize(width: label.frame.width + 24, height: 32)
-    }
-}
+//extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+//    
+//    var samplePreferences: [String] {
+//        return ["Wrestle", "Karate", "Takewondo"]
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return samplePreferences.count
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView,
+//                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        
+//        let cell = collectionView.dequeueReusableCell(
+//            withReuseIdentifier: "token",
+//            for: indexPath
+//        ) as! PreferenceTokenCellCollectionViewCell
+//        
+//        cell.label.text = samplePreferences[indexPath.row]
+//        return cell
+//    }
+//    
+//    // Optional: dynamic token sizing
+//    func collectionView(_ collectionView: UICollectionView,
+//                        layout collectionViewLayout: UICollectionViewLayout,
+//                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        
+//        let label = UILabel()
+//        label.text = samplePreferences[indexPath.row]
+//        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+//        label.sizeToFit()
+//        
+//        return CGSize(width: label.frame.width + 24, height: 32)
+//    }
+//}
 

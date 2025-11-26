@@ -9,6 +9,12 @@ import UIKit
 class FavoritesView: UIView {
     
     // MARK: - UI Components
+    private let navBar: TopNavigationBarView = {
+        let navBar = TopNavigationBarView()
+        navBar.translatesAutoresizingMaskIntoConstraints = false
+        return navBar
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Favorites"
@@ -27,7 +33,7 @@ class FavoritesView: UIView {
         layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(FavoriteCardCell.self, forCellWithReuseIdentifier: "FavoriteCardCell")
         return collectionView
@@ -82,8 +88,9 @@ class FavoritesView: UIView {
     
     // MARK: - Setup
     private func setupUI() {
-        backgroundColor = .systemBackground
+        backgroundColor = UIColor(red: 1.0, green: 0.953, blue: 0.851, alpha: 1.0)
         
+        addSubview(navBar)
         addSubview(titleLabel)
         addSubview(collectionView)
         addSubview(emptyStateView)
@@ -97,8 +104,14 @@ class FavoritesView: UIView {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            
+            navBar.topAnchor.constraint(equalTo: self.topAnchor ,constant: 70),
+            navBar.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            navBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            navBar.heightAnchor.constraint(equalToConstant: 60),
+            
             // Title Label
-            titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             
@@ -138,6 +151,10 @@ class FavoritesView: UIView {
         emptyStateView.isHidden = !show
         collectionView.isHidden = show
     }
+    
+    func setAccountTarget(_ target: Any?, action: Selector) {
+        navBar.account.addTarget(target, action: action, for: .touchUpInside)
+    }
 }
 
 // MARK: - Favorite Card Cell
@@ -145,7 +162,7 @@ class FavoriteCardCell: UICollectionViewCell {
     
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray5
+        view.backgroundColor = UIColor(red: 238/255, green: 208/255, blue: 141/255, alpha: 1.0)
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -155,7 +172,7 @@ class FavoriteCardCell: UICollectionViewCell {
     private let starIcon: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "star.fill")
-        imageView.tintColor = .systemYellow
+        imageView.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -174,7 +191,7 @@ class FavoriteCardCell: UICollectionViewCell {
     
     private let progressBarBackground: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray4
+        view.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.25)
         view.layer.cornerRadius = 4
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -201,6 +218,7 @@ class FavoriteCardCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = .clear
         setupUI()
     }
     

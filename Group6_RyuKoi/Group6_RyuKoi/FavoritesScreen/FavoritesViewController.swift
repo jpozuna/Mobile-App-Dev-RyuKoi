@@ -22,12 +22,19 @@ class FavoritesViewController: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         loadFavorites()
+        
+        favoritesView.setAccountTarget(self, action: #selector(openProfile))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Reload favorites when screen appears in case they changed
         loadFavorites()
+    }
+    
+    @objc func openProfile() {
+        let profileScreen = ProfileViewController()
+        navigationController?.pushViewController(profileScreen, animated: true)
     }
     
     // MARK: - Setup
