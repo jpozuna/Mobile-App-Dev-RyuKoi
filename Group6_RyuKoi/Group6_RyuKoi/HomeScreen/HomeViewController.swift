@@ -30,6 +30,8 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
         
+        homeScreen.categoryLabel.text = receivedCategory
+        
         //MARK: patching the table view delegate and datasource to controller...
         homeScreen.collectionViewLessons.delegate = self
         homeScreen.collectionViewLessons.dataSource = self
