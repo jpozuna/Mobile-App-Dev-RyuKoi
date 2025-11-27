@@ -1,48 +1,10 @@
 import UIKit
 
-enum MartialArt {
-    case taekwondo
-    case karate
-    case boxing
-    case mma
-    case wrestling
-    case judo
-    case bjj
-    case kickboxing
-    case muayThai
-    
-    var color: UIColor {
-        switch self {
-        case .taekwondo:
-            return UIColor(red: 0.2, green: 0.4, blue: 0.8, alpha: 1.0) // Blue
-        case .karate:
-            return UIColor(red: 0.9, green: 0.3, blue: 0.3, alpha: 1.0) // Red
-        case .boxing:
-            return UIColor(red: 0.8, green: 0.6, blue: 0.2, alpha: 1.0) // Gold
-        case .mma:
-            return UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0) // Dark Gray
-        case .wrestling:
-            return UIColor(red: 0.6, green: 0.2, blue: 0.8, alpha: 1.0) // Purple
-        case .judo:
-            return UIColor(red: 0.2, green: 0.6, blue: 0.4, alpha: 1.0) // Green
-        case .bjj:
-            return UIColor(red: 0.1, green: 0.3, blue: 0.5, alpha: 1.0) // Dark Blue
-        case .kickboxing:
-            return UIColor(red: 0.9, green: 0.5, blue: 0.2, alpha: 1.0) // Orange
-        case .muayThai:
-            return UIColor(red: 0.8, green: 0.2, blue: 0.4, alpha: 1.0) // Pink/Red
-        }
-    }
-}
-
-struct Lesson {
-    let title: String
-    let progressState: LessonProgressState
-    let martialArt: MartialArt
-}
 
 class LessonViewController: TopNavigationViewController {
     
+    var selectedLesson: Lesson?
+        
     // MARK: - Properties
     private let lessonView = LessonView()
     
@@ -56,17 +18,21 @@ class LessonViewController: TopNavigationViewController {
     }()
     
     private var lessons: [Lesson] = [
-        Lesson(title: "Basic Kicks", progressState: .notStarted, martialArt: .taekwondo),
-        Lesson(title: "Punching Form", progressState: .notStarted, martialArt: .karate),
-        Lesson(title: "Footwork", progressState: .inProgress, martialArt: .boxing),
-        Lesson(title: "Ground Game", progressState: .inProgress, martialArt: .bjj),
-        Lesson(title: "Throws", progressState: .completed, martialArt: .judo),
-        Lesson(title: "Clinch Work", progressState: .retry, martialArt: .muayThai)
+        Lesson(title: "Basic Kicks", progressState: .notStarted, progressPercentage: 0, martialArt: .taekwondo, favorite: false),
+        Lesson(title: "Punching Form", progressState: .notStarted, progressPercentage: 0, martialArt: .karate, favorite: false),
+        Lesson(title: "Footwork", progressState: .inProgress, progressPercentage: 50, martialArt: .boxing, favorite: false),
+        Lesson(title: "Ground Game", progressState: .inProgress, progressPercentage: 50, martialArt: .bjj, favorite: false),
+        Lesson(title: "Throws", progressState: .completed, progressPercentage: 100, martialArt: .judo, favorite: false),
+        Lesson(title: "Clinch Work", progressState: .retry, progressPercentage: 0, martialArt: .muayThai, favorite: false)
     ]
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let selectedLesson = selectedLesson {
+            lessonView.titleLabel.text = selectedLesson.title
+        }
         
         view.addSubview(lessonView.backButton)
         view.addSubview(lessonView.titleLabel)

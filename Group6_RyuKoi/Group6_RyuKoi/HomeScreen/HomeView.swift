@@ -10,8 +10,6 @@ import UIKit
 class HomeView: UIView {
     var backBtn: UIButton!
     var navBar: TopNavigationBarView!
-    //MARK: scrollview for scrolling???
-    var contentWrapper:UIScrollView!
     
     //MARK: collectionView for lessons...
     var collectionViewLessons: UICollectionView!
@@ -25,12 +23,11 @@ class HomeView: UIView {
         backgroundColor = UIColor(red: 1.0, green: 0.953, blue: 0.851, alpha: 1.0)
         setupBackBtn()
         setupNavBar()
-        setupContentWrapper()
         setupCollectionView()
         setupRect()
         categoryLabel = setupLabel("Taekwondo", 30)
         subLabel = setupLabel("Lesson journey", 16)
-        
+                
         initConstraints()
     }
     
@@ -47,12 +44,6 @@ class HomeView: UIView {
         //navBar.backgroundColor = .red.withAlphaComponent(0.3)
         navBar.translatesAutoresizingMaskIntoConstraints = false
         addSubview(navBar)
-    }
-    
-    func setupContentWrapper(){
-        contentWrapper = UIScrollView()
-        contentWrapper.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(contentWrapper)
     }
     
     func setupCollectionView(){
@@ -89,12 +80,6 @@ class HomeView: UIView {
     
     func initConstraints(){
         NSLayoutConstraint.activate([
-            /*
-             //MARK: contentWrapper constraints...
-             contentWrapper.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-             contentWrapper.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-             contentWrapper.widthAnchor.constraint(equalTo:self.safeAreaLayoutGuide.widthAnchor),
-             contentWrapper.heightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.heightAnchor),*/
             
             backBtn.topAnchor.constraint(equalTo: self.topAnchor, constant: 80),
             backBtn.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 10),

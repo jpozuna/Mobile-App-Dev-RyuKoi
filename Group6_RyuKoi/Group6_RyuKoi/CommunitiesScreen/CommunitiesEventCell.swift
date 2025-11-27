@@ -35,8 +35,9 @@ class CommunitiesEventCell: UICollectionViewCell {
     
     override var isSelected: Bool {
         didSet {
+            // Highlight when selected
             eventView.backgroundColor = isSelected
-                ? UIColor(red: 220/255, green: 71/255, blue: 49/255, alpha: 0.53)
+                ? UIColor(red: 0.72, green: 0.21, blue: 0.055, alpha: 0.55)
                 : UIColor(red: 0.933, green: 0.81, blue: 0.55, alpha: 1.0)
         }
     }
