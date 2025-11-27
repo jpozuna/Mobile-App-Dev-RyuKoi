@@ -73,6 +73,10 @@ class HomeLessonCell: UICollectionViewCell {
     private var progressBarFillWidthConstraint: NSLayoutConstraint?
     private var currentLesson: Lesson?
     
+    func configure(with lesson: HomeLesson) {
+        titleLabel.text = lesson.title
+    }
+    
     
     // MARK: - Selection Highlight
     
@@ -97,7 +101,6 @@ class HomeLessonCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     // MARK: - Layout
     

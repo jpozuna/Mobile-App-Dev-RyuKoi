@@ -14,3 +14,10 @@ struct Lesson {
     let martialArt: MartialArt
     let favorite: Bool
 }
+
+enum LessonProgressState {
+    case notStarted
+    case inProgress
+    case completed
+    case retry
+}

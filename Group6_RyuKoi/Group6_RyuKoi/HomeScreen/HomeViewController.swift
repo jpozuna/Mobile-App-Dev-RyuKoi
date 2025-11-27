@@ -10,17 +10,20 @@
 
 import UIKit
 
+struct HomeLesson {
+    let id: String
+    let title: String
+    let progressPercentage: Int
+    let martialArt: String
+    let isFavorite: Bool
+}
+
+
 class HomeViewController: UIViewController {
     let homeScreen = HomeView()
     var receivedCategory = "" // To be changed with the category...
-    let lessons: [Lesson] = [
-        Lesson(title: "Basic Kicks", progressState: .notStarted, progressPercentage: 0, martialArt: .taekwondo, favorite: false),
-        Lesson(title: "Punching Form", progressState: .notStarted, progressPercentage: 0, martialArt: .karate, favorite: false),
-        Lesson(title: "Footwork", progressState: .inProgress, progressPercentage: 50, martialArt: .boxing, favorite: false),
-        Lesson(title: "Ground Game", progressState: .inProgress, progressPercentage: 50, martialArt: .bjj, favorite: false),
-        Lesson(title: "Throws", progressState: .completed, progressPercentage: 100, martialArt: .judo, favorite: false),
-        Lesson(title: "Clinch Work", progressState: .retry, progressPercentage: 0, martialArt: .muayThai, favorite: false)
-    ]
+    private var homeLessons: [HomeLesson] = []
+    
     
     override func loadView() {
         view = homeScreen
@@ -32,13 +35,17 @@ class HomeViewController: UIViewController {
         
         homeScreen.categoryLabel.text = receivedCategory
         
-        //MARK: patching the table view delegate and datasource to controller...
         homeScreen.collectionViewLessons.delegate = self
         homeScreen.collectionViewLessons.dataSource = self
+        
+        homeLessons = loadMockLessons()
+        
+        homeScreen.collectionViewLessons.reloadData()
         
         homeScreen.setAccountTarget(self, action: #selector(openProfile))
         homeScreen.backBtn.addTarget(self, action: #selector(backBtnTapped), for: .touchUpInside)
     }
+    
     
     @objc func openProfile() {
         let profileScreen = ProfileViewController()
@@ -48,51 +55,64 @@ class HomeViewController: UIViewController {
     @objc func backBtnTapped(){
         navigationController?.popViewController(animated: true)
     }
+    
+    private func loadMockLessons() -> [HomeLesson] {
+        return [
+            HomeLesson(id: "1", title: "Basic Punches", progressPercentage: 20, martialArt: "Karate", isFavorite: false),
+            HomeLesson(id: "2", title: "Roundhouse Kick", progressPercentage: 0, martialArt: "Taekwondo", isFavorite: false),
+            HomeLesson(id: "3", title: "Breakfall Basics", progressPercentage: 45, martialArt: "Judo", isFavorite: false),
+            HomeLesson(id: "4", title: "Guard Escape", progressPercentage: 70, martialArt: "BJJ", isFavorite: false),
+            HomeLesson(id: "5", title: "Blocking Drills", progressPercentage: 55, martialArt: "Karate", isFavorite: false),
+            HomeLesson(id: "6", title: "Spinning Kick", progressPercentage: 10, martialArt: "Taekwondo", isFavorite: false)
+        ]
+    }
+    
 }
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        return lessons.count
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return homeLessons.count
     }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "HomeLessonCell",
             for: indexPath
         ) as! HomeLessonCell
-
-        cell.configure(with: lessons[indexPath.row])
+        
+        let lesson = homeLessons[indexPath.row]
+        cell.configure(with: lesson)
+        
         return cell
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let lesson = lessons[indexPath.row]
-
-        let lessonToPass = Lesson(
-            title: lesson.title,
-            progressState: lesson.progressState,
-            progressPercentage: lesson.progressPercentage,
-            martialArt: lesson.martialArt,
-            favorite: lesson.favorite
-        )
-
+        //let lesson = lessons[indexPath.row]
+        
+        //        let lessonToPass = Lesson(
+        //            title: lesson.title,
+        //            progressState: lesson.progressState,
+        //            progressPercentage: lesson.progressPercentage,
+        //            martialArt: lesson.martialArt,
+        //            favorite: lesson.favorite
+        //        )
+        
         let lessonViewController = LessonViewController()
-        lessonViewController.selectedLesson = lessonToPass
-
+        //lessonViewController.selectedLesson = lessonToPass
+        
         navigationController?.pushViewController(lessonViewController, animated: true)
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-
+        
         let spacing: CGFloat = 12
         let totalSpacing = spacing * 3
         let width = (collectionView.bounds.width - totalSpacing) / 2
-
+        
         return CGSize(width: width, height: 150)
     }
 }
