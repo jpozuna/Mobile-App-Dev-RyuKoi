@@ -80,32 +80,38 @@ extension FavoritesViewController: UICollectionViewDataSource {
         }
         
         let lesson = favoritesList[indexPath.row]
-        cell.configure(with: lesson, animated: true)
+        cell.configure(with: lesson)
         
         return cell
     }
 }
 
 // MARK: - UICollectionViewDelegate
-extension FavoritesViewController: UICollectionViewDelegate {
+extension FavoritesViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedLesson = favoritesList[indexPath.row]
-        print("Selected favorite lesson: \(selectedLesson.title)")
         
-        // TODO: Navigate to lesson detail screen
-        // Example: navigationController?.pushViewController(LessonDetailViewController(lesson: selectedLesson), animated: true)
-    }
-}
+        let lessonToPass = Lesson(
+            title: selectedLesson.title,
+            progressState: .notStarted,
+            progressPercentage: 0,
+            martialArt: .taekwondo,
+            favorite: true// or whatever category
+        )
+        
+        let lessonViewController = LessonViewController()
+        lessonViewController.selectedLesson = lessonToPass
 
-// MARK: - UICollectionViewDelegateFlowLayout
-extension FavoritesViewController: UICollectionViewDelegateFlowLayout {
+        navigationController?.pushViewController(lessonViewController, animated: true)
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let padding: CGFloat = 16
         let availableWidth = collectionView.bounds.width - (padding * 3) // Left, right, and middle padding
         let cellWidth = availableWidth / 2
-        let cellHeight: CGFloat = 200 // Taller to accommodate progress bar
+        let cellHeight = cellWidth
+        //let cellHeight: CGFloat = 200 // Taller to accommodate progress bar
         
         return CGSize(width: cellWidth, height: cellHeight)
     }

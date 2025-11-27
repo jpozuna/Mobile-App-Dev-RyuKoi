@@ -1,25 +1,25 @@
 //
-//  HomeLessonCell.swift
-//  RyūKoi
+//  FavoriteCardCell.swift
+//  Group6_RyuKoi
 //
-//  Created by Allison Lee on 11/13/25.
+//  Created by Allison Lee on 11/26/25.
 //
 
 import UIKit
 
-class HomeLessonCell: UICollectionViewCell {
+class FavoriteCardCell: UICollectionViewCell {
     
     // MARK: - Public Properties
     
-    var lesson: Lesson? {
+    var lesson: FavoriteLesson? {
         didSet { configure(with: lesson) }
     }
     
-    static let identifier = "HomeLessonCell"
+    static let identifier = "FavoriteCardCell"
     
     // MARK: - UI Elements
     
-    private let lessonView: UIView = {
+    private let cardView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(red: 238/255, green: 208/255, blue: 141/255, alpha: 1.0)
         view.layer.cornerRadius = 16
@@ -29,11 +29,11 @@ class HomeLessonCell: UICollectionViewCell {
     }()
     
     private let starIcon: UIImageView = {
-        let iv = UIImageView()
-        iv.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
-        iv.contentMode = .scaleAspectFit
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
+        let imageView = UIImageView()
+        imageView.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     private let titleLabel: UILabel = {
@@ -71,16 +71,15 @@ class HomeLessonCell: UICollectionViewCell {
     }()
     
     private var progressBarFillWidthConstraint: NSLayoutConstraint?
-    private var currentLesson: Lesson?
-    
+    private var currentLesson: FavoriteLesson?
     
     // MARK: - Selection Highlight
     
     override var isSelected: Bool {
         didSet {
-            lessonView.backgroundColor = isSelected
-            ? UIColor(red: 0.72, green: 0.21, blue: 0.055, alpha: 0.55)
-            : UIColor(red: 0.933, green: 0.81, blue: 0.55, alpha: 1.0)
+            cardView.backgroundColor = isSelected
+                ? UIColor(red: 0.72, green: 0.21, blue: 0.055, alpha: 0.55)
+                : UIColor(red: 0.933, green: 0.81, blue: 0.55, alpha: 1.0)
         }
     }
     
@@ -114,62 +113,54 @@ class HomeLessonCell: UICollectionViewCell {
     // MARK: - Setup
     
     private func setupViewHierarchy() {
-        contentView.addSubview(lessonView)
+        contentView.addSubview(cardView)
         contentView.addSubview(starIcon)
         
-        lessonView.addSubview(titleLabel)
-        lessonView.addSubview(progressBarBackground)
+        cardView.addSubview(titleLabel)
+        cardView.addSubview(progressBarBackground)
         progressBarBackground.addSubview(progressBarFill)
-        lessonView.addSubview(progressLabel)
+        cardView.addSubview(progressLabel)
     }
-    
     
     private func setupConstraints() {
         
         progressBarFillWidthConstraint = progressBarFill.widthAnchor.constraint(equalToConstant: 0)
         
         NSLayoutConstraint.activate([
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            // Lesson container
-            lessonView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            lessonView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            lessonView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            lessonView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
-            // Star icon
-            starIcon.topAnchor.constraint(equalTo: lessonView.topAnchor, constant: 12),
-            starIcon.trailingAnchor.constraint(equalTo: lessonView.trailingAnchor, constant: -12),
+            starIcon.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
+            starIcon.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
             starIcon.widthAnchor.constraint(equalToConstant: 28),
             starIcon.heightAnchor.constraint(equalToConstant: 28),
             
-            // Title
             titleLabel.topAnchor.constraint(equalTo: starIcon.bottomAnchor, constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: lessonView.leadingAnchor, constant: 12),
-            titleLabel.trailingAnchor.constraint(equalTo: lessonView.trailingAnchor, constant: -12),
+            titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
             
-            // Progress background
             progressBarBackground.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            progressBarBackground.leadingAnchor.constraint(equalTo: lessonView.leadingAnchor, constant: 16),
-            progressBarBackground.trailingAnchor.constraint(equalTo: lessonView.trailingAnchor, constant: -16),
+            progressBarBackground.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
+            progressBarBackground.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
             progressBarBackground.heightAnchor.constraint(equalToConstant: 8),
             
-            // Progress fill
             progressBarFill.topAnchor.constraint(equalTo: progressBarBackground.topAnchor),
             progressBarFill.leadingAnchor.constraint(equalTo: progressBarBackground.leadingAnchor),
             progressBarFill.bottomAnchor.constraint(equalTo: progressBarBackground.bottomAnchor),
             progressBarFillWidthConstraint!,
             
-            // Progress label
             progressLabel.topAnchor.constraint(equalTo: progressBarBackground.bottomAnchor, constant: 8),
-            progressLabel.centerXAnchor.constraint(equalTo: lessonView.centerXAnchor),
-            progressLabel.bottomAnchor.constraint(lessThanOrEqualTo: lessonView.bottomAnchor, constant: -12)
+            progressLabel.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
+            progressLabel.bottomAnchor.constraint(lessThanOrEqualTo: cardView.bottomAnchor, constant: -12)
         ])
     }
     
     
     // MARK: - Config
     
-    func configure(with lesson: Lesson?) {
+    func configure(with lesson: FavoriteLesson?) {
         guard let lesson = lesson else { return }
         
         currentLesson = lesson
@@ -177,20 +168,18 @@ class HomeLessonCell: UICollectionViewCell {
         titleLabel.text = lesson.title
         progressLabel.text = "\(lesson.progressPercentage)% Complete"
         
-        // Star icon depends on favorite
-        starIcon.image = UIImage(systemName: lesson.favorite ? "star.fill" : "star")
-        starIcon.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
+        // Star always filled for favorites
+        starIcon.image = UIImage(systemName: "star.fill")
         
-        updateProgress(percentage: lesson.progressPercentage, animated: true)
+        updateProgressBar(percentage: lesson.progressPercentage, animated: true)
     }
     
     
     // MARK: - Progress Bar
     
-    private func updateProgress(percentage: Int, animated: Bool) {
-        
-        let frac = CGFloat(percentage) / 100
-        let targetWidth = progressBarBackground.bounds.width * frac
+    private func updateProgressBar(percentage: Int, animated: Bool) {
+        let fraction = CGFloat(percentage) / 100
+        let newWidth = progressBarBackground.bounds.width * fraction
         
         progressBarFill.backgroundColor = {
             switch percentage {
@@ -200,7 +189,7 @@ class HomeLessonCell: UICollectionViewCell {
             }
         }()
         
-        progressBarFillWidthConstraint?.constant = targetWidth
+        progressBarFillWidthConstraint?.constant = newWidth
         
         if animated {
             UIView.animate(withDuration: 0.3) {

@@ -6,13 +6,21 @@
 //
 //MARK: TODO
 // need to add ability to "heart" a lesson to add to favorites // changed some stuff with bottom nav bar??? dunno how it works.
+// need to change table view to grid view for lessons//favorites//communities
 
 import UIKit
 
 class HomeViewController: UIViewController {
     let homeScreen = HomeView()
     var receivedCategory = "" // To be changed with the category...
-    let lessons = ["Lesson 1", "Lesson 2", "Lesson 3", "Lesson 4", "Lesson 5", "Lesson 6"]
+    let lessons: [Lesson] = [
+        Lesson(title: "Basic Kicks", progressState: .notStarted, progressPercentage: 0, martialArt: .taekwondo, favorite: false),
+        Lesson(title: "Punching Form", progressState: .notStarted, progressPercentage: 0, martialArt: .karate, favorite: false),
+        Lesson(title: "Footwork", progressState: .inProgress, progressPercentage: 50, martialArt: .boxing, favorite: false),
+        Lesson(title: "Ground Game", progressState: .inProgress, progressPercentage: 50, martialArt: .bjj, favorite: false),
+        Lesson(title: "Throws", progressState: .completed, progressPercentage: 100, martialArt: .judo, favorite: false),
+        Lesson(title: "Clinch Work", progressState: .retry, progressPercentage: 0, martialArt: .muayThai, favorite: false)
+    ]
     
     override func loadView() {
         view = homeScreen
@@ -42,25 +50,47 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         return lessons.count
     }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeLessonCell.identifier, for: indexPath) as! HomeLessonCell
-        cell.lessonLabel.text = lessons[indexPath.item]
+
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "HomeLessonCell",
+            for: indexPath
+        ) as! HomeLessonCell
+
+        cell.configure(with: lessons[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected lesson: \(lessons[indexPath.item])")
-        // You can handle favorite toggles here or push to lesson detail
+        let lesson = lessons[indexPath.row]
+
+        let lessonToPass = Lesson(
+            title: lesson.title,
+            progressState: lesson.progressState,
+            progressPercentage: lesson.progressPercentage,
+            martialArt: lesson.martialArt,
+            favorite: lesson.favorite
+        )
+
+        let lessonViewController = LessonViewController()
+        lessonViewController.selectedLesson = lessonToPass
+
+        navigationController?.pushViewController(lessonViewController, animated: true)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.frame.width - 12) / 2 // 2 columns
-        return CGSize(width: width, height: width)
+
+        let spacing: CGFloat = 12
+        let totalSpacing = spacing * 3
+        let width = (collectionView.bounds.width - totalSpacing) / 2
+
+        return CGSize(width: width, height: 150)
     }
 }
