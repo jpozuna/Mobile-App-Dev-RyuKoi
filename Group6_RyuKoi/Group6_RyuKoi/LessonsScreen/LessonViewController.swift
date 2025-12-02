@@ -17,15 +17,6 @@ class LessonViewController: TopNavigationViewController {
         return button
     }()
     
-    private var lessons: [Lesson] = [
-        Lesson(title: "Basic Kicks", progressState: .notStarted, progressPercentage: 0, martialArt: .taekwondo, favorite: false),
-        Lesson(title: "Punching Form", progressState: .notStarted, progressPercentage: 0, martialArt: .karate, favorite: false),
-        Lesson(title: "Footwork", progressState: .inProgress, progressPercentage: 50, martialArt: .boxing, favorite: false),
-        Lesson(title: "Ground Game", progressState: .inProgress, progressPercentage: 50, martialArt: .bjj, favorite: false),
-        Lesson(title: "Throws", progressState: .completed, progressPercentage: 100, martialArt: .judo, favorite: false),
-        Lesson(title: "Clinch Work", progressState: .retry, progressPercentage: 0, martialArt: .muayThai, favorite: false)
-    ]
-    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,7 +97,7 @@ class LessonViewController: TopNavigationViewController {
 // MARK: - UICollectionViewDataSource
 extension LessonViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return lessons.count
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -117,8 +108,8 @@ extension LessonViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        let lesson = lessons[indexPath.item]
-        cell.configure(title: lesson.title, progressState: lesson.progressState, color: lesson.martialArt.color)
+        //let lesson = lessons[indexPath.item]
+        //cell.configure(title: lesson.title, progressState: lesson.progressState, color: lesson.martialArt.color)
         
         return cell
     }
@@ -127,8 +118,8 @@ extension LessonViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension LessonViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedLesson = lessons[indexPath.item]
-        navigateToPractices(with: selectedLesson)
+        //let selectedLesson = lessons[indexPath.item]
+        //navigateToPractices(with: selectedLesson)
     }
 }
 
