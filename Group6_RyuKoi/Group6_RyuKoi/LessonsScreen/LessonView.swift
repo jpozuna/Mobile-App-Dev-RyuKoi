@@ -1,5 +1,13 @@
 import UIKit
 
+// MARK: - Lesson Progress State
+enum LessonProgressState {
+    case notStarted
+    case inProgress
+    case completed
+    case retry
+}
+
 // MARK: - Lesson Card
 class LessonCard: UIView {
     

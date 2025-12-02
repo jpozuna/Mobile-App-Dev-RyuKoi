@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 struct Lesson: Codable {
     var title: String
@@ -14,6 +13,7 @@ struct Lesson: Codable {
     var progressState: LessonProgressState
     var progressPercentage: Int
     var practice: Practice
+    //let martialArt: MartialArt
 }
 
 struct Practice: Codable {
@@ -21,10 +21,9 @@ struct Practice: Codable {
     var tips: String
 }
 
-enum LessonProgressState: String, Codable {
+enum LessonProgressState: Codable {
     case notStarted
     case inProgress
     case completed
     case retry
 }
-

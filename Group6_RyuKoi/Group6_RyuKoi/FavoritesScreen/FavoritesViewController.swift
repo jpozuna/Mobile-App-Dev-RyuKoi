@@ -79,16 +79,16 @@ extension FavoritesViewController: UICollectionViewDelegate, UICollectionViewDel
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedLesson = favoritesList[indexPath.row]
         
-//        let lessonToPass = Lesson(
-//            title: selectedLesson.title,
-//            progressState: .notStarted,
-//            progressPercentage: 0,
-//            martialArt: .taekwondo,
-//            favorite: true// or whatever category
-//        )
+        let lessonToPass = Lesson(
+            title: selectedLesson.title,
+            progressState: .notStarted,
+            progressPercentage: 0,
+            martialArt: .taekwondo,
+            favorite: true// or whatever category
+        )
         
         let lessonViewController = LessonViewController()
-        //lessonViewController.selectedLesson = lessonToPass
+        lessonViewController.selectedLesson = lessonToPass
 
         navigationController?.pushViewController(lessonViewController, animated: true)
     }

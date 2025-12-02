@@ -178,7 +178,7 @@ class HomeLessonCell: UICollectionViewCell {
         progressLabel.text = "\(lesson.progressPercentage)% Complete"
         
         // Star icon depends on favorite
-        starIcon.image = UIImage(systemName: "star")
+        starIcon.image = UIImage(systemName: lesson.favorite ? "star.fill" : "star")
         starIcon.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
         
         updateProgress(percentage: lesson.progressPercentage, animated: true)
