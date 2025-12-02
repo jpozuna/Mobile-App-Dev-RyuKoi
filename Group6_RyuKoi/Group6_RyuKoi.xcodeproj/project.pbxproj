@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		90419D712EDF645C006092DC /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 90419D702EDF645C006092DC /* FirebaseAuth */; };
+		90419D732EDF645C006092DC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 90419D722EDF645C006092DC /* FirebaseFirestore */; };
+		90419D752EDF645C006092DC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 90419D742EDF645C006092DC /* FirebaseStorage */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		90329CAA2ECAEDD600923A14 /* Group6_RyuKoi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Group6_RyuKoi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +42,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90419D712EDF645C006092DC /* FirebaseAuth in Frameworks */,
+				90419D732EDF645C006092DC /* FirebaseFirestore in Frameworks */,
+				90419D752EDF645C006092DC /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +87,9 @@
 			);
 			name = Group6_RyuKoi;
 			packageProductDependencies = (
+				90419D702EDF645C006092DC /* FirebaseAuth */,
+				90419D722EDF645C006092DC /* FirebaseFirestore */,
+				90419D742EDF645C006092DC /* FirebaseStorage */,
 			);
 			productName = Group6_RyuKoi;
 			productReference = 90329CAA2ECAEDD600923A14 /* Group6_RyuKoi.app */;
@@ -107,6 +119,9 @@
 			);
 			mainGroup = 90329CA12ECAEDD600923A14;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				90419D6F2EDF645C006092DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 90329CAB2ECAEDD600923A14 /* Products */;
 			projectDirPath = "";
@@ -337,6 +352,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		90419D6F2EDF645C006092DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.6.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		90419D702EDF645C006092DC /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 90419D6F2EDF645C006092DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		90419D722EDF645C006092DC /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 90419D6F2EDF645C006092DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		90419D742EDF645C006092DC /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 90419D6F2EDF645C006092DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 90329CA22ECAEDD600923A14 /* Project object */;
 }
