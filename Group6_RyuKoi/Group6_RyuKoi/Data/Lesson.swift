@@ -21,7 +21,7 @@ struct Practice: Codable {
     var tips: String
 }
 
-enum LessonProgressState: Codable {
+enum LessonProgressState: String, Codable {
     case notStarted
     case inProgress
     case completed

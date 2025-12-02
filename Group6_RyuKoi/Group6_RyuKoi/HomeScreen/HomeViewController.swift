@@ -13,14 +13,6 @@ import UIKit
 class HomeViewController: UIViewController {
     let homeScreen = HomeView()
     var receivedCategory = "" // To be changed with the category...
-    let lessons: [Lesson] = [
-        Lesson(title: "Basic Kicks", progressState: .notStarted, progressPercentage: 0, martialArt: .taekwondo, favorite: false),
-        Lesson(title: "Punching Form", progressState: .notStarted, progressPercentage: 0, martialArt: .karate, favorite: false),
-        Lesson(title: "Footwork", progressState: .inProgress, progressPercentage: 50, martialArt: .boxing, favorite: false),
-        Lesson(title: "Ground Game", progressState: .inProgress, progressPercentage: 50, martialArt: .bjj, favorite: false),
-        Lesson(title: "Throws", progressState: .completed, progressPercentage: 100, martialArt: .judo, favorite: false),
-        Lesson(title: "Clinch Work", progressState: .retry, progressPercentage: 0, martialArt: .muayThai, favorite: false)
-    ]
     
     override func loadView() {
         view = homeScreen
@@ -54,7 +46,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        return lessons.count
+        return 10
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -64,23 +56,14 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             for: indexPath
         ) as! HomeLessonCell
 
-        cell.configure(with: lessons[indexPath.row])
+        //cell.configure(with: lessons[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let lesson = lessons[indexPath.row]
-
-        let lessonToPass = Lesson(
-            title: lesson.title,
-            progressState: lesson.progressState,
-            progressPercentage: lesson.progressPercentage,
-            martialArt: lesson.martialArt,
-            favorite: lesson.favorite
-        )
 
         let lessonViewController = LessonViewController()
-        lessonViewController.selectedLesson = lessonToPass
+        //lessonViewController.selectedLesson = lessonToPass
 
         navigationController?.pushViewController(lessonViewController, animated: true)
     }
