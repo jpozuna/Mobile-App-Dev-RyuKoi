@@ -137,7 +137,7 @@ class PracticeView: UIView {
     // MARK: - Setup
     
     private func setupView() {
-        backgroundColor = UIColor(red: 1.0, green: 0.953, blue: 0.851, alpha: 1.0)
+        backgroundColor = .white
         
         addSubview(backButton)
         addSubview(progressLabel)
@@ -259,6 +259,7 @@ class PracticeView: UIView {
 }
 
 // MARK: - Model
+
 struct PracticeLesson {
     let imageName: String
     let tips: String
