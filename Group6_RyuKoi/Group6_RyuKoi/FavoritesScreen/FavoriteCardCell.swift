@@ -11,7 +11,7 @@ class FavoriteCardCell: UICollectionViewCell {
     
     // MARK: - Public Properties
     
-    var lesson: FavoriteLesson? {
+    var lesson: Lesson? {
         didSet { configure(with: lesson) }
     }
     
@@ -71,7 +71,7 @@ class FavoriteCardCell: UICollectionViewCell {
     }()
     
     private var progressBarFillWidthConstraint: NSLayoutConstraint?
-    private var currentLesson: FavoriteLesson?
+    private var currentLesson: Lesson?
     
     // MARK: - Selection Highlight
     
@@ -160,7 +160,7 @@ class FavoriteCardCell: UICollectionViewCell {
     
     // MARK: - Config
     
-    func configure(with lesson: FavoriteLesson?) {
+    func configure(with lesson: Lesson?) {
         guard let lesson = lesson else { return }
         
         currentLesson = lesson

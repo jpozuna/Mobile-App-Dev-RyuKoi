@@ -9,7 +9,12 @@
 import Foundation
 import UIKit
 
-enum MartialArt {
+struct Categories: Codable {
+    var name: MartialArt
+    var lesson: [Lesson]
+}
+
+enum MartialArt: String, Codable {
     case taekwondo
     case karate
     case boxing

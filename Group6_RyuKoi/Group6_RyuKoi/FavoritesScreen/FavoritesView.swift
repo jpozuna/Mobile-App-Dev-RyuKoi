@@ -156,10 +156,3 @@ class FavoritesView: UIView {
         navBar.account.addTarget(target, action: action, for: .touchUpInside)
     }
 }
-
-// MARK: - Model
-struct FavoriteLesson {
-    let id: String
-    let title: String
-    let progressPercentage: Int // 0-100
-}

@@ -11,7 +11,7 @@ class FavoritesViewController: UIViewController {
     
     // MARK: - Properties
     private let favoritesView = FavoritesView()
-    private var favoritesList: [FavoriteLesson] = []
+    private var favoritesList: [Lesson] = []
     
     // MARK: - Lifecycle
     override func loadView() {
@@ -47,23 +47,10 @@ class FavoritesViewController: UIViewController {
     private func loadFavorites() {
         // TODO: Replace with actual data loading from UserDefaults or a data manager
         // For now, using mock data to demonstrate the UI
-        favoritesList = loadMockFavorites()
         
         // Show empty state if no favorites
         favoritesView.showEmptyState(favoritesList.isEmpty)
         favoritesView.collectionView.reloadData()
-    }
-    
-    private func loadMockFavorites() -> [FavoriteLesson] {
-        // Mock data for testing with varying progress levels
-        return [
-            FavoriteLesson(id: "1", title: "Basic Punching Technique", progressPercentage: 100),
-            FavoriteLesson(id: "2", title: "Roundhouse Kick", progressPercentage: 75),
-            FavoriteLesson(id: "3", title: "Guard Passing", progressPercentage: 45),
-            FavoriteLesson(id: "4", title: "Front Kick Form", progressPercentage: 100),
-            FavoriteLesson(id: "5", title: "Defensive Stance", progressPercentage: 60),
-            FavoriteLesson(id: "6", title: "Combination Drills", progressPercentage: 20)
-        ]
     }
 }
 
