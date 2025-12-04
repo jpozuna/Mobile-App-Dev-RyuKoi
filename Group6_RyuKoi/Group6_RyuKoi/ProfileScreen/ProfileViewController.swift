@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ProfileViewController: UIViewController {
     let profileScreen = ProfileView()
@@ -20,8 +21,8 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
         
-//        profileScreen.preferencesCollectionView.dataSource = self
-//        profileScreen.preferencesCollectionView.delegate = self
+        //        profileScreen.preferencesCollectionView.dataSource = self
+        //        profileScreen.preferencesCollectionView.delegate = self
         
         profileScreen.notificationTableView.dataSource = self
         profileScreen.notificationTableView.delegate = self
@@ -34,10 +35,38 @@ class ProfileViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc func logoutTapped(){
-        let loginScreen = LoginViewController()
-        navigationController?.pushViewController(loginScreen, animated: true)
+    @objc func logoutTapped() {
+        let alert = UIAlertController(
+            title: "Logging out!",
+            message: "Are you sure you want to log out?",
+            preferredStyle: .actionSheet
+        )
+        
+        alert.addAction(UIAlertAction(title: "Yes, log out!", style: .default, handler: { _ in
+            do {
+                try Auth.auth().signOut()
+                
+                DispatchQueue.main.async {
+                    let loginScreen = LoginViewController()
+                    let nav = UINavigationController(rootViewController: loginScreen)
+                    nav.modalPresentationStyle = .fullScreen
+                    
+                    UIApplication.shared.connectedScenes
+                        .compactMap { $0 as? UIWindowScene }
+                        .first?.windows
+                        .first?.rootViewController = nav
+                }
+                
+            } catch {
+                print("Logout error:", error)
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        present(alert, animated: true)
     }
+    
 }
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
@@ -59,37 +88,37 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
 }
 
 //extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-//    
+//
 //    var samplePreferences: [String] {
 //        return ["Wrestle", "Karate", "Takewondo"]
 //    }
-//    
+//
 //    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        return samplePreferences.count
 //    }
-//    
+//
 //    func collectionView(_ collectionView: UICollectionView,
 //                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        
+//
 //        let cell = collectionView.dequeueReusableCell(
 //            withReuseIdentifier: "token",
 //            for: indexPath
 //        ) as! PreferenceTokenCellCollectionViewCell
-//        
+//
 //        cell.label.text = samplePreferences[indexPath.row]
 //        return cell
 //    }
-//    
+//
 //    // Optional: dynamic token sizing
 //    func collectionView(_ collectionView: UICollectionView,
 //                        layout collectionViewLayout: UICollectionViewLayout,
 //                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        
+//
 //        let label = UILabel()
 //        label.text = samplePreferences[indexPath.row]
 //        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
 //        label.sizeToFit()
-//        
+//
 //        return CGSize(width: label.frame.width + 24, height: 32)
 //    }
 //}

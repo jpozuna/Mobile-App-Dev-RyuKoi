@@ -26,8 +26,7 @@ class SignInViewController: UIViewController {
     }
     
     @objc func handleSignIn() {
-        let bottomNav = BottomNavigationViewController()
-        navigationController?.pushViewController(bottomNav, animated: true)
+        registerNewAccount()
     }
     
     @objc func handleLogin() {
