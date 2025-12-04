@@ -6,26 +6,19 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class CategoriesViewController: UIViewController {
     //MARK: list to display the category names in the TableView...
-    let categoryNames = ["Taekwondo", "Karate", "Boxing", "Jujutsu", "Other"]
+    var categoryNames = ["Taekwondo", "Karate", "Boxing", "Jujutsu", "Other"]
+    var handleAuth: AuthStateDidChangeListenerHandle?
+    var currentUser: FirebaseAuth.User?
     let categoriesScreen = CategoriesView()
     
     override func loadView() {
         view = categoriesScreen
     }
     
-    // help with the navBar Layout
-    //    override func viewWillAppear(_ animated: Bool) {
-    //        super.viewWillAppear(animated)
-    //        navigationController?.setNavigationBarHidden(true, animated: animated)
-    //    }
-    
-    //    override func viewWillDisappear(_ animated: Bool) {
-    //        super.viewWillDisappear(animated)
-    //        navigationController?.setNavigationBarHidden(false, animated: animated)
-    //    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

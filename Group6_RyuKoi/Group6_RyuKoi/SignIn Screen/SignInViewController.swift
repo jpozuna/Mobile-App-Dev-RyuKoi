@@ -26,8 +26,8 @@ class SignInViewController: UIViewController {
     }
     
     @objc func handleSignIn() {
-        let categoriesScreen = CategoriesViewController()
-        navigationController?.pushViewController(categoriesScreen, animated: true)
+        let bottomNav = BottomNavigationViewController()
+        navigationController?.pushViewController(bottomNav, animated: true)
     }
     
     @objc func handleLogin() {

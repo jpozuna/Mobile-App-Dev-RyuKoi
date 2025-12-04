@@ -23,16 +23,9 @@ class CategoriesView: UIView {
         initConstraints()
     }
     
-    /*
-     func setupContentWrapper(){
-     contentWrapper = UIScrollView()
-     contentWrapper.translatesAutoresizingMaskIntoConstraints = false
-     self.addSubview(contentWrapper)
-     }*/
     
     func setupNavBar() {
         navBar = TopNavigationBarView()
-        //navBar.backgroundColor = .red.withAlphaComponent(0.3)
         navBar.translatesAutoresizingMaskIntoConstraints = false
         addSubview(navBar)
     }
@@ -59,14 +52,6 @@ class CategoriesView: UIView {
     
     func initConstraints(){
         NSLayoutConstraint.activate([
-            /*
-             //MARK: contentWrapper constraints...
-             contentWrapper.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-             contentWrapper.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-             contentWrapper.widthAnchor.constraint(equalTo:self.safeAreaLayoutGuide.widthAnchor),
-             contentWrapper.heightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.heightAnchor),
-             */
-            
             navBar.topAnchor.constraint(equalTo: self.topAnchor ,constant: 70),
             navBar.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             navBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),
