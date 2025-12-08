@@ -53,7 +53,7 @@ class CommunityView: UIView {
     
     func setupEventNameContainer(){
         eventNameContainer = UIView()
-        eventNameContainer.backgroundColor = UIColor(red: 184/255, green: 57/255, blue: 14/255, alpha: 0.33)
+        eventNameContainer.backgroundColor = UIColor(red: 184/255, green: 57/255, blue: 14/255, alpha: 0.67)
         eventNameContainer.layer.cornerRadius = 20
         eventNameContainer.clipsToBounds = true
         eventNameContainer.translatesAutoresizingMaskIntoConstraints = false
@@ -72,6 +72,7 @@ class CommunityView: UIView {
     func setupBioContainer(){
         bioContainer = UIView()
         bioContainer.backgroundColor = UIColor(red: 238/255, green: 208/255, blue: 141/255, alpha: 1.0)
+        bioContainer.layer.cornerRadius = 13
         bioContainer.clipsToBounds = true
         bioContainer.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(bioContainer)
@@ -149,6 +150,7 @@ class CommunityView: UIView {
             eventNameContainer.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 10),
             eventNameContainer.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             eventNameContainer.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            eventNameContainer.heightAnchor.constraint(equalToConstant: 100),
             
             eventName.topAnchor.constraint(equalTo: eventNameContainer.topAnchor, constant: 8),
             eventName.bottomAnchor.constraint(equalTo: eventNameContainer.bottomAnchor, constant: -8),
@@ -185,7 +187,7 @@ class CommunityView: UIView {
             
             message.topAnchor.constraint(equalTo: commentsTableView.bottomAnchor, constant: 16),
             message.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -25),
-            message.leadingAnchor.constraint(equalTo: sendBtn.trailingAnchor, constant: 25),
+            message.leadingAnchor.constraint(equalTo: sendBtn.trailingAnchor, constant: 15),
             message.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             message.heightAnchor.constraint(equalToConstant: 150),
             

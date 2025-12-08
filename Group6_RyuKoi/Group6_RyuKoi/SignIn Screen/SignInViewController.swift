@@ -16,7 +16,7 @@ class SignInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Sign In"
+        title = "Sign Up"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.hidesBackButton = true
 
@@ -26,8 +26,7 @@ class SignInViewController: UIViewController {
     }
     
     @objc func handleSignIn() {
-        let categoriesScreen = CategoriesViewController()
-        navigationController?.pushViewController(categoriesScreen, animated: true)
+        registerNewAccount()
     }
     
     @objc func handleLogin() {

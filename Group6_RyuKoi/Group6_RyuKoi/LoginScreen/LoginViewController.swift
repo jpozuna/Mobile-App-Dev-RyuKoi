@@ -27,12 +27,10 @@ class LoginViewController: UIViewController {
     
     @objc func handleSignIn() {
         let signinScreen = SignInViewController()
-       // let communityScreen = CommunityViewController()
         navigationController?.pushViewController(signinScreen, animated: true)
     }
     
     @objc func handleLogin() {
-        let categoriesScreen = CategoriesViewController()
-        navigationController?.pushViewController(categoriesScreen, animated: true)
+        login()
     }
 }

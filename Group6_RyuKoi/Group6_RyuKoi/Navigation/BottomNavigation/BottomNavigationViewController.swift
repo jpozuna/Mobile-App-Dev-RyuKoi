@@ -49,8 +49,11 @@ class BottomNavigationViewController: UITabBarController, UITabBarControllerDele
         //MARK: setting up this view controller as the Tab Bar Controller...
         self.viewControllers = [tabHome, tabFavorites, tabEvents]
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.isHidden = true
+        navigationItem.hidesBackButton = true
+        navigationItem.largeTitleDisplayMode = .never
     }
 }

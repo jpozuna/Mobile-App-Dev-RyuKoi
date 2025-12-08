@@ -18,6 +18,7 @@ class CommunitiesView: UIView {
     
     var titleBackground: UIView! // to be under the category label?
     var eventLabel: UILabel!
+    var addbtn: UIButton!
     var subLabel: UILabel!
     
     override init(frame: CGRect) {
@@ -28,6 +29,7 @@ class CommunitiesView: UIView {
         setupNavBar()
         setupCollectionView()
         setupRect()
+        setupAddBtn()
         eventLabel = setupLabel("Events", 30)
         subLabel = setupLabel("In the community", 16)
         
@@ -67,6 +69,18 @@ class CommunitiesView: UIView {
         self.addSubview(titleBackground)
     }
     
+    func setupAddBtn(){
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
+        
+        addbtn = UIButton()
+        addbtn.setImage(UIImage(systemName: "plus.circle", withConfiguration: config), for: .normal)
+        addbtn.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
+        addbtn.imageView?.contentMode = .scaleAspectFit
+        addbtn.translatesAutoresizingMaskIntoConstraints = false
+        titleBackground.addSubview(addbtn)
+        
+    }
+    
     func setupLabel(_ label: String, _ size: CGFloat)->UILabel {
         let lab = UILabel()
         lab.text = label
@@ -104,6 +118,9 @@ class CommunitiesView: UIView {
             eventLabel.centerXAnchor.constraint(equalTo: titleBackground.centerXAnchor),
             eventLabel.centerYAnchor.constraint(equalTo: titleBackground.centerYAnchor),
 
+            addbtn.trailingAnchor.constraint(equalTo: titleBackground.trailingAnchor, constant: -8),
+            addbtn.topAnchor.constraint(equalTo: titleBackground.topAnchor, constant: 5),
+            
             // MARK: sublabel under background ...
             subLabel.topAnchor.constraint(equalTo: titleBackground.bottomAnchor, constant: 8),
             subLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),

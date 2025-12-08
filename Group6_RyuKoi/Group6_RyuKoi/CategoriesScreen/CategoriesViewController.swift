@@ -6,26 +6,19 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class CategoriesViewController: UIViewController {
     //MARK: list to display the category names in the TableView...
-    let categoryNames = ["Taekwondo", "Karate", "Boxing", "Jujutsu", "Other"]
+    var categoryNames = ["Taekwondo", "Karate", "Boxing", "Jujutsu", "Other"]
+    var handleAuth: AuthStateDidChangeListenerHandle?
+    var currentUser: FirebaseAuth.User?
     let categoriesScreen = CategoriesView()
     
     override func loadView() {
         view = categoriesScreen
     }
     
-    // help with the navBar Layout
-    //    override func viewWillAppear(_ animated: Bool) {
-    //        super.viewWillAppear(animated)
-    //        navigationController?.setNavigationBarHidden(true, animated: animated)
-    //    }
-    
-    //    override func viewWillDisappear(_ animated: Bool) {
-    //        super.viewWillDisappear(animated)
-    //        navigationController?.setNavigationBarHidden(false, animated: animated)
-    //    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,19 +44,19 @@ class CategoriesViewController: UIViewController {
 
 extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryNames.count
+        return mockCategories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "categories", for: indexPath) as! CategoriesTableViewCell
-        cell.categoryLabel.text = categoryNames[indexPath.row]
+        cell.categoryLabel.text = mockCategories[indexPath.row].name.rawValue
         return cell
     }
     
     //MARK: deal with user interaction with a cell...
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let homeController = HomeViewController()
-        homeController.receivedCategory = self.categoryNames[indexPath.row]
+        homeController.receivedCategory = mockCategories[indexPath.row]
         navigationController?.pushViewController(homeController, animated: true)
     }
 }

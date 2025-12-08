@@ -78,7 +78,7 @@ class SignInView: UIView {
     
     func setupSigninButton() {
         signInBtn = UIButton(type: .system)
-        signInBtn.setTitle("Sign In", for: .normal)
+        signInBtn.setTitle("Sign Up", for: .normal)
         signInBtn.setTitleColor(.white, for: .normal)
         signInBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         signInBtn.backgroundColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)

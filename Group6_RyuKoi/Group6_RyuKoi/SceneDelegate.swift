@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         //        window?.rootViewController = nav
         //        window?.makeKeyAndVisible()
         
-        let rootViewController = BottomNavigationViewController()
+        let rootViewController = SignInViewController()
         
         let navigationController = UINavigationController(
             rootViewController: rootViewController
