@@ -13,7 +13,6 @@ struct Lesson: Codable {
     var progressState: LessonProgressState
     var progressPercentage: Int
     var practice: Practice
-    //let martialArt: MartialArt
 }
 
 struct Practice: Codable {
@@ -27,3 +26,6 @@ enum LessonProgressState: String, Codable {
     case completed
     case retry
 }
+
+
+

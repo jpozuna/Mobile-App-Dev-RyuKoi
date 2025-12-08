@@ -19,6 +19,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         title = "Login"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.hidesBackButton = true
         
         loginScreen.signInBtn.addTarget(self, action: #selector(handleSignIn), for: .touchUpInside)
         loginScreen.loginBtn.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
@@ -26,12 +27,10 @@ class LoginViewController: UIViewController {
     
     @objc func handleSignIn() {
         let signinScreen = SignInViewController()
-       // let communityScreen = CommunityViewController()
         navigationController?.pushViewController(signinScreen, animated: true)
     }
     
     @objc func handleLogin() {
-        let bottomNav = BottomNavigationViewController()
-        navigationController?.pushViewController(bottomNav, animated: true)
+        login()
     }
 }

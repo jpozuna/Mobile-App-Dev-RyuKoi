@@ -36,6 +36,7 @@ class LoginView: UIView {
     func setupEmail() {
         email = UITextField()
         email.placeholder = "Email"
+        email.keyboardType = .emailAddress
         email.borderStyle = .roundedRect
         email.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(email)
@@ -45,14 +46,15 @@ class LoginView: UIView {
         password = UITextField()
         password.placeholder = "Password"
         password.borderStyle = .roundedRect
-        password.isHidden = false
+        password.autocapitalizationType = .none
+        password.isHidden = true
         password.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(password)
     }
     
     func setupSignInBtn() {
         signInBtn = UIButton()
-        signInBtn.setTitle("Don't have a account? Sign In", for: .normal)
+        signInBtn.setTitle("Don't have a account? Sign Up", for: .normal)
         signInBtn.setTitleColor(UIColor(red: 184/255, green: 57/255, blue: 14/255, alpha: 1), for: .normal)
         signInBtn.layer.cornerRadius = 5
         signInBtn.translatesAutoresizingMaskIntoConstraints = false

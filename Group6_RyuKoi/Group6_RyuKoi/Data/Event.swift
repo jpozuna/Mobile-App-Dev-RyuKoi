@@ -10,10 +10,9 @@ import Foundation
 struct Event: Codable {
     var name: String
     var bio: String
-    var organizer: User
+    var organizer: String
     var date: String
     var time: String
-    var location: String
     var comments: [Comment] = []
 }
 

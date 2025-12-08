@@ -10,7 +10,6 @@ import UIKit
 class TopNavigationBarView: UIView {
     var logo: UIButton!
     var searchBar: UISearchBar!
-    var filter: UIButton!
     var account: UIButton!
     
     override init(frame: CGRect) {
@@ -19,7 +18,6 @@ class TopNavigationBarView: UIView {
         //self.backgroundColor = .gray.withAlphaComponent(0.2)
         setupLogo()
         setupSearchBar()
-        setupFilter()
         setupAccount()
         initConstraints()
     }
@@ -44,16 +42,6 @@ class TopNavigationBarView: UIView {
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         addSubview(searchBar)
     }
-
-    
-    func setupFilter(){
-        filter = UIButton(type: .system)
-        filter.setImage(UIImage(systemName: "line.3.horizontal.decrease.circle"), for: .normal)
-        filter.imageView?.contentMode = .scaleAspectFit
-        filter.tintColor = .black
-        filter.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(filter)
-    }
     
     func setupAccount() {
         account = UIButton(type: .system)
@@ -76,13 +64,8 @@ class TopNavigationBarView: UIView {
             account.widthAnchor.constraint(equalToConstant: 50),
             account.heightAnchor.constraint(equalToConstant: 50),
             
-            filter.centerYAnchor.constraint(equalTo: centerYAnchor),
-            filter.trailingAnchor.constraint(equalTo: account.leadingAnchor, constant: -10),
-            filter.widthAnchor.constraint(equalToConstant: 50),
-            filter.heightAnchor.constraint(equalToConstant: 50),
-            
             searchBar.leadingAnchor.constraint(equalTo: logo.trailingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: filter.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: account.leadingAnchor),
             searchBar.centerYAnchor.constraint(equalTo: centerYAnchor),
             searchBar.heightAnchor.constraint(equalToConstant: 50)
         ])

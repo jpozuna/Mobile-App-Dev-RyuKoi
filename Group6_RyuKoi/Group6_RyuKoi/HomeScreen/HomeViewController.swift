@@ -12,7 +12,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
     let homeScreen = HomeView()
-    var receivedCategory = "" // To be changed with the category...
+    var receivedCategory: Categories?
     
     override func loadView() {
         view = homeScreen
@@ -22,7 +22,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
         
-        homeScreen.categoryLabel.text = receivedCategory
+        homeScreen.categoryLabel.text = receivedCategory?.name.rawValue
         
         //MARK: patching the table view delegate and datasource to controller...
         homeScreen.collectionViewLessons.delegate = self
@@ -46,36 +46,35 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return receivedCategory?.lesson.count ?? 0
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "HomeLessonCell",
             for: indexPath
         ) as! HomeLessonCell
-
-        //cell.configure(with: lessons[indexPath.row])
+        
+        let lesson = receivedCategory!.lesson[indexPath.row]
+        cell.configure(with: lesson)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
         let lessonViewController = LessonViewController()
-        //lessonViewController.selectedLesson = lessonToPass
-
+        lessonViewController.selectedLesson = receivedCategory?.lesson[indexPath.row]
         navigationController?.pushViewController(lessonViewController, animated: true)
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-
+        
         let spacing: CGFloat = 12
         let totalSpacing = spacing * 3
         let width = (collectionView.bounds.width - totalSpacing) / 2
-
+        
         return CGSize(width: width, height: 150)
     }
 }

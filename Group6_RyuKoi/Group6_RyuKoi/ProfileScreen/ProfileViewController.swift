@@ -10,8 +10,8 @@ import FirebaseAuth
 
 class ProfileViewController: UIViewController {
     let profileScreen = ProfileView()
-    //let notifications: [Notification] = []
-    
+    var currentUser:FirebaseAuth.User?
+
     override func loadView() {
         view = profileScreen
     }
@@ -21,8 +21,11 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
         
-        //        profileScreen.preferencesCollectionView.dataSource = self
-        //        profileScreen.preferencesCollectionView.delegate = self
+        if let user = Auth.auth().currentUser {
+            profileScreen.name.text = user.displayName ?? "No Name"
+            profileScreen.email.text = "Email: \(user.email ?? "")"
+        }
+        
         
         profileScreen.notificationTableView.dataSource = self
         profileScreen.notificationTableView.delegate = self
@@ -87,39 +90,4 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
     }
 }
 
-//extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-//
-//    var samplePreferences: [String] {
-//        return ["Wrestle", "Karate", "Takewondo"]
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return samplePreferences.count
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView,
-//                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//
-//        let cell = collectionView.dequeueReusableCell(
-//            withReuseIdentifier: "token",
-//            for: indexPath
-//        ) as! PreferenceTokenCellCollectionViewCell
-//
-//        cell.label.text = samplePreferences[indexPath.row]
-//        return cell
-//    }
-//
-//    // Optional: dynamic token sizing
-//    func collectionView(_ collectionView: UICollectionView,
-//                        layout collectionViewLayout: UICollectionViewLayout,
-//                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-//
-//        let label = UILabel()
-//        label.text = samplePreferences[indexPath.row]
-//        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-//        label.sizeToFit()
-//
-//        return CGSize(width: label.frame.width + 24, height: 32)
-//    }
-//}
 
