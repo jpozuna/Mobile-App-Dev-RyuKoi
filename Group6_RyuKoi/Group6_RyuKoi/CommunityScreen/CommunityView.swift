@@ -169,13 +169,13 @@ class CommunityView: UIView, UITextViewDelegate {
             bio.trailingAnchor.constraint(equalTo: bioContainer.trailingAnchor, constant: -16),
             bio.topAnchor.constraint(equalTo: date.bottomAnchor, constant: 10),
             
-            notificationBtn.trailingAnchor.constraint(equalTo: bioContainer.trailingAnchor, constant: -10),
+            notificationBtn.trailingAnchor.constraint(equalTo: bioContainer.trailingAnchor, constant: -5),
             notificationBtn.widthAnchor.constraint(equalToConstant: 50),
             notificationBtn.heightAnchor.constraint(equalToConstant: 50),
             
             date.topAnchor.constraint(equalTo: bioContainer.topAnchor, constant: 16),
             notificationBtn.topAnchor.constraint(equalTo: bio.bottomAnchor, constant: 10),
-            notificationBtn.bottomAnchor.constraint(equalTo: bioContainer.bottomAnchor, constant: -16),
+            notificationBtn.bottomAnchor.constraint(equalTo: bioContainer.bottomAnchor, constant: -5),
             
             commentsTableView.topAnchor.constraint(equalTo: bioContainer.bottomAnchor, constant: 16),
             commentsTableView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 16),
