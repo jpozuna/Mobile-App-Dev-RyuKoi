@@ -59,6 +59,7 @@ extension SignInViewController{
     
     //MARK: creates new user with email and password
     func registerNewAccount(){
+        showActivityIndicator()
         if let first = signinScreen.firstName.text,
            let last = signinScreen.lastName.text,
            let email = signinScreen.email.text,
@@ -108,7 +109,7 @@ extension SignInViewController{
                 print("Error occured: \(error)")
                 return
             }
-            
+            self.hideActivityIndicator()
             let bottomNav = BottomNavigationViewController()
             self.navigationController?.pushViewController(bottomNav, animated: true)
         }

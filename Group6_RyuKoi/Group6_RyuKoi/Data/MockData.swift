@@ -10,7 +10,6 @@ import Foundation
 // MARK: Placeholder Image Data
 let placeholderImageData = Data(base64Encoded: "iVBORw0KGgoAAAANSUhEUgAAAAUA")!
 
-// MARK: Mock Categories Data (4–6 lessons each)
 let mockCategories: [Categories] = [
 
     // --------------------------------------------------
@@ -38,7 +37,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Essential Kicks",
                 description: "Master front kick, roundhouse, and side kick.",
-                progressState: .inProgress,
+                progressState: .notStarted,
                 progressPercentage: 35,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Drive your knee upward before extending the kick.")
@@ -54,7 +53,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Poomsae Basics",
                 description: "Perform the first Taekwondo form (Taegeuk Il Jang).",
-                progressState: .completed,
+                progressState: .notStarted,
                 progressPercentage: 100,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Focus on rhythm and breathing.")
@@ -79,7 +78,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Stances Training",
                 description: "Practice front stance, horse stance, and back stance.",
-                progressState: .inProgress,
+                progressState: .notStarted,
                 progressPercentage: 20,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Distribute weight properly across both feet.")
@@ -95,7 +94,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Kata Introduction",
                 description: "Learn Taikyoku Shodan, the first kata.",
-                progressState: .retry,
+                progressState: .notStarted,
                 progressPercentage: 10,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Maintain strong stances throughout.")
@@ -103,7 +102,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Self-Defense Basics",
                 description: "Introduction to distance, timing, and awareness.",
-                progressState: .completed,
+                progressState: .notStarted,
                 progressPercentage: 100,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "React calmly and move off the attack line.")
@@ -120,7 +119,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Boxing Stance",
                 description: "Learn balance, guard position, and mobility.",
-                progressState: .completed,
+                progressState: .notStarted,
                 progressPercentage: 100,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Stay light on your toes.")
@@ -136,7 +135,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Fundamental Punches",
                 description: "Master jab, cross, hook, and uppercut.",
-                progressState: .inProgress,
+                progressState: .notStarted,
                 progressPercentage: 50,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Twist your hips with each punch.")
@@ -160,7 +159,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Heavy Bag Training",
                 description: "Develop power, endurance, and timing.",
-                progressState: .retry,
+                progressState: .notStarted,
                 progressPercentage: 15,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Don't push the bag—snap your punches."
@@ -186,7 +185,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Basic Grips",
                 description: "Learn sleeve grip, collar grip, and overhooks.",
-                progressState: .completed,
+                progressState: .notStarted,
                 progressPercentage: 100,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Stay relaxed—do not squeeze too hard.")
@@ -194,7 +193,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Joint Locks",
                 description: "Practice wrist locks, elbow locks, and control holds.",
-                progressState: .retry,
+                progressState: .notStarted,
                 progressPercentage: 25,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Use leverage, not strength.")
@@ -202,7 +201,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Throws Introduction",
                 description: "Learn hip toss, foot sweep, and shoulder throw.",
-                progressState: .inProgress,
+                progressState: .notStarted,
                 progressPercentage: 40,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Break opponent balance (kuzushi) first.")
@@ -227,7 +226,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Meditation Basics",
                 description: "Breathing and focus techniques.",
-                progressState: .completed,
+                progressState: .notStarted,
                 progressPercentage: 100,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Relax your jaw and breathe naturally.")
@@ -243,7 +242,7 @@ let mockCategories: [Categories] = [
             Lesson(
                 title: "Strength Training",
                 description: "Bodyweight exercises for martial artists.",
-                progressState: .inProgress,
+                progressState: .notStarted,
                 progressPercentage: 30,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Maintain proper form over speed.")
