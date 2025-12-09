@@ -31,7 +31,6 @@ class LoginViewController: UIViewController {
     }
     
     @objc func handleLogin() {
-        let categoriesScreen = CategoriesViewController()
-        navigationController?.pushViewController(categoriesScreen, animated: true)
+        login()
     }
 }

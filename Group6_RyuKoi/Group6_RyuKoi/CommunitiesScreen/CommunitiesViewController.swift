@@ -8,68 +8,75 @@
 // need to add plus button to event title label later...
 
 import UIKit
+import FirebaseFirestore
 
 class CommunitiesViewController: UIViewController {
     let communitiesScreen = CommunitiesView()
-    let navBar = TopNavigationBarView()
-    let events = ["event", "event", "event", "event", "event", "event"]
+    let database = Firestore.firestore()
+    var eventsList: [Event] = []
     
     override func loadView() {
         view = communitiesScreen
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.database.collection("event")
+            .addSnapshotListener { snapshot, error in
+                guard let documents = snapshot?.documents else { return }
+                self.eventsList = documents.compactMap { try? $0.data(as: Event.self) }
+                self.communitiesScreen.collectionViewEvents.reloadData()
+            }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(navBar)
-        navBar.translatesAutoresizingMaskIntoConstraints = false
         navigationItem.hidesBackButton = true
         
-        // remove separator line between cells
-        communitiesScreen.tableViewEvents.separatorStyle = .none
-        
-        NSLayoutConstraint.activate([
-            navBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 35),
-            navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            navBar.heightAnchor.constraint(equalToConstant: 60)
-        ])
-        
-        
-        navBar.account.addTarget(self, action: #selector(openProfile), for: .touchUpInside)
-        
         //MARK: patching the table view delegate and datasource to controller...
-        communitiesScreen.tableViewEvents.delegate = self
-        communitiesScreen.tableViewEvents.dataSource = self
+        communitiesScreen.collectionViewEvents.delegate = self
+        communitiesScreen.collectionViewEvents.dataSource = self
+        
+        communitiesScreen.addbtn.addTarget(self, action: #selector(addEvent), for: .touchUpInside)
+        
+        communitiesScreen.setAccountTarget(self, action: #selector(openProfile))
     }
     
     @objc func openProfile() {
-        let profileVC = ProfileViewController()
-        navigationController?.pushViewController(profileVC, animated: true)
-    }
-}
-
-extension CommunitiesViewController: UITableViewDelegate, UITableViewDataSource{
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return events.count
+        let profileScreen = ProfileViewController()
+        navigationController?.pushViewController(profileScreen, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "events", for: indexPath) as! CommunitiesTableViewCell
-        
-        let leftIndex = indexPath.row * 2
-        let rightIndex = leftIndex + 1
-        
-        cell.leftLabel.text = events[leftIndex]
-        
-        if rightIndex < events.count {
-            cell.rightEventView.isHidden = false
-            cell.rightLabel.text = events[rightIndex]
-        } else {
-            // Hide right box if odd number of lessons
-            cell.rightEventView.isHidden = true
-        }
-        
+    @objc func addEvent() {
+        let addEventScreen = AddEventViewController()
+        navigationController?.pushViewController(addEventScreen, animated: true)
+    }
+    
+}
+
+extension CommunitiesViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return eventsList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CommunitiesEventCell.identifier, for: indexPath) as! CommunitiesEventCell
+        cell.eventLabel.text = eventsList[indexPath.item].name
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let eventScreen = CommunityViewController()
+        eventScreen.selectedEvent = eventsList[indexPath.item]
+        navigationController?.pushViewController(eventScreen, animated: true)
+        // You can handle favorite toggles here or push to lesson detail
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = (collectionView.frame.width - 12) / 2 // 2 columns
+        return CGSize(width: width, height: width)
     }
 }

@@ -8,11 +8,11 @@
 import UIKit
 
 class HomeView: UIView {
-    //MARK: scrollview for scrolling???
-    var contentWrapper:UIScrollView!
+    var backBtn: UIButton!
+    var navBar: TopNavigationBarView!
     
-    //MARK: tableView for lessons...
-    var tableViewLessons: UITableView!
+    //MARK: collectionView for lessons...
+    var collectionViewLessons: UICollectionView!
     
     var categoryBackground: UIView! // to be under the category label?
     var categoryLabel: UILabel!
@@ -21,29 +21,42 @@ class HomeView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor(red: 1.0, green: 0.953, blue: 0.851, alpha: 1.0)
-
-        setupContentWrapper()
-        setupTableViewCategories()
+        setupBackBtn()
+        setupNavBar()
+        setupCollectionView()
         setupRect()
-        categoryLabel = setupLabel("Taekwondo", 30) // due to change...temporary
+        categoryLabel = setupLabel("Taekwondo", 30)
         subLabel = setupLabel("Lesson journey", 16)
-        
+                
         initConstraints()
     }
     
-    func setupContentWrapper(){
-        contentWrapper = UIScrollView()
-        contentWrapper.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(contentWrapper)
+    func setupBackBtn() {
+        backBtn = UIButton()
+        backBtn.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        backBtn.tintColor = .label
+        backBtn.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(backBtn)
     }
     
-    func setupTableViewCategories(){
-        tableViewLessons = UITableView()
-        tableViewLessons.register(HomeTableViewCell.self, forCellReuseIdentifier: "lessons")
-        tableViewLessons.translatesAutoresizingMaskIntoConstraints = false
-        tableViewLessons.backgroundColor = .clear
-
-        self.addSubview(tableViewLessons)
+    func setupNavBar() {
+        navBar = TopNavigationBarView()
+        //navBar.backgroundColor = .red.withAlphaComponent(0.3)
+        navBar.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(navBar)
+    }
+    
+    func setupCollectionView(){
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        
+        collectionViewLessons = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionViewLessons.translatesAutoresizingMaskIntoConstraints = false
+        collectionViewLessons.backgroundColor = .clear
+        collectionViewLessons.register(HomeLessonCell.self, forCellWithReuseIdentifier: "HomeLessonCell")
+        self.addSubview(collectionViewLessons)
     }
     
     func setupRect() {
@@ -67,32 +80,40 @@ class HomeView: UIView {
     
     func initConstraints(){
         NSLayoutConstraint.activate([
-            /*
-            //MARK: contentWrapper constraints...
-            contentWrapper.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            contentWrapper.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-            contentWrapper.widthAnchor.constraint(equalTo:self.safeAreaLayoutGuide.widthAnchor),
-            contentWrapper.heightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.heightAnchor),*/
+            
+            backBtn.topAnchor.constraint(equalTo: self.topAnchor, constant: 80),
+            backBtn.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            
+            //navBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor ,constant: 20),
+            navBar.leadingAnchor.constraint(equalTo: backBtn.trailingAnchor),
+            navBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            navBar.centerYAnchor.constraint(equalTo: backBtn.centerYAnchor),
+            navBar.heightAnchor.constraint(equalToConstant: 60),
             
             // MARK: category background ...
-            categoryBackground.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+            categoryBackground.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 10),
             categoryBackground.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             categoryBackground.heightAnchor.constraint(equalToConstant: 60),
-            categoryBackground.widthAnchor.constraint(equalToConstant: 220),
-
+            categoryBackground.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            categoryBackground.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            
             // MARK: category label ...
             categoryLabel.centerXAnchor.constraint(equalTo: categoryBackground.centerXAnchor),
             categoryLabel.centerYAnchor.constraint(equalTo: categoryBackground.centerYAnchor),
-
+            
             // MARK: sublabel under background ...
             subLabel.topAnchor.constraint(equalTo: categoryBackground.bottomAnchor, constant: 8),
             subLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
-            tableViewLessons.topAnchor.constraint(equalTo: subLabel.bottomAnchor, constant: 10),
-            tableViewLessons.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 8),
-            tableViewLessons.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -8),
-            tableViewLessons.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -8) // maybe!
+            collectionViewLessons.topAnchor.constraint(equalTo: subLabel.bottomAnchor, constant: 10),
+            collectionViewLessons.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
+            collectionViewLessons.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8),
+            collectionViewLessons.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -8)
         ])
+    }
+    
+    func setAccountTarget(_ target: Any?, action: Selector) {
+        navBar.account.addTarget(target, action: action, for: .touchUpInside)
     }
     
     //MARK: initializing constraints...

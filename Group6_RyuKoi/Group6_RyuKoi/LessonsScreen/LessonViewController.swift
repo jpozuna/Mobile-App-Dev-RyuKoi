@@ -1,194 +1,36 @@
 import UIKit
 
-enum MartialArt {
-    case taekwondo
-    case karate
-    case boxing
-    case mma
-    case wrestling
-    case judo
-    case bjj
-    case kickboxing
-    case muayThai
+
+class LessonViewController: UIViewController {
+    let lessonScreen = LessonView()
+    var selectedLesson: Lesson?
     
-    var color: UIColor {
-        switch self {
-        case .taekwondo:
-            return UIColor(red: 0.2, green: 0.4, blue: 0.8, alpha: 1.0) // Blue
-        case .karate:
-            return UIColor(red: 0.9, green: 0.3, blue: 0.3, alpha: 1.0) // Red
-        case .boxing:
-            return UIColor(red: 0.8, green: 0.6, blue: 0.2, alpha: 1.0) // Gold
-        case .mma:
-            return UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0) // Dark Gray
-        case .wrestling:
-            return UIColor(red: 0.6, green: 0.2, blue: 0.8, alpha: 1.0) // Purple
-        case .judo:
-            return UIColor(red: 0.2, green: 0.6, blue: 0.4, alpha: 1.0) // Green
-        case .bjj:
-            return UIColor(red: 0.1, green: 0.3, blue: 0.5, alpha: 1.0) // Dark Blue
-        case .kickboxing:
-            return UIColor(red: 0.9, green: 0.5, blue: 0.2, alpha: 1.0) // Orange
-        case .muayThai:
-            return UIColor(red: 0.8, green: 0.2, blue: 0.4, alpha: 1.0) // Pink/Red
-        }
+    override func loadView() {
+        self.view = lessonScreen
     }
     
-    var description: String {
-        switch self {
-        case .taekwondo: return "Taekwondo"
-        case .karate: return "Karate"
-        case .boxing: return "Boxing"
-        case .mma: return "MMA"
-        case .wrestling: return "Wrestling"
-        case .judo: return "Judo"
-        case .bjj: return "Brazilian Jiu-Jitsu"
-        case .kickboxing: return "Kickboxing"
-        case .muayThai: return "Muay Thai"
-        }
-    }
-}
-
-struct Lesson {
-    let title: String
-    let progressState: LessonProgressState
-    let martialArt: MartialArt
-}
-
-class LessonViewController: TopNavigationViewController {
-    
-    // MARK: - Properties
-    private let lessonView = LessonView()
-    
-    // Add favorites button with star icon
-    private let favoritesButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "star.fill"), for: .normal)
-        button.tintColor = .systemYellow
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    private var lessons: [Lesson] = [
-        Lesson(title: "Basic Kicks", progressState: .notStarted, martialArt: .taekwondo),
-        Lesson(title: "Punching Form", progressState: .notStarted, martialArt: .karate),
-        Lesson(title: "Footwork", progressState: .inProgress, martialArt: .boxing),
-        Lesson(title: "Ground Game", progressState: .inProgress, martialArt: .bjj),
-        Lesson(title: "Throws", progressState: .completed, martialArt: .judo),
-        Lesson(title: "Clinch Work", progressState: .retry, martialArt: .muayThai)
-    ]
-    
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.isHidden = true
+        navigationItem.hidesBackButton = true
+        navigationItem.largeTitleDisplayMode = .never
         
-        view.addSubview(lessonView.backButton)
-        view.addSubview(lessonView.titleLabel)
-        view.addSubview(favoritesButton)  // Add favorites button
-        view.addSubview(lessonView.collectionView)
-        
-        setupConstraints()
-        setupCollectionView()
-        setupBackButton()
-        setupFavoritesButton()  // Setup favorites button
+        lessonScreen.setAccountTarget(self, action: #selector(openProfile))
+        lessonScreen.backBtn.addTarget(self, action: #selector(backBtnPressed), for: .touchUpInside)
+        lessonScreen.startBtn.addTarget(self, action: #selector(startBtnPressed), for: .touchUpInside)
     }
     
-    // MARK: - Setup
-    private func setupConstraints() {
-        lessonView.backButton.translatesAutoresizingMaskIntoConstraints = false
-        lessonView.titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        lessonView.collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            lessonView.backButton.topAnchor.constraint(equalTo: topNav.bottomAnchor, constant: 10),
-            lessonView.backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            lessonView.backButton.widthAnchor.constraint(equalToConstant: 30),
-            lessonView.backButton.heightAnchor.constraint(equalToConstant: 30),
-            
-            lessonView.titleLabel.centerYAnchor.constraint(equalTo: lessonView.backButton.centerYAnchor),
-            lessonView.titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            // Favorites button on the right side with star icon
-            favoritesButton.centerYAnchor.constraint(equalTo: lessonView.backButton.centerYAnchor),
-            favoritesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            favoritesButton.widthAnchor.constraint(equalToConstant: 30),
-            favoritesButton.heightAnchor.constraint(equalToConstant: 30),
-            
-            lessonView.collectionView.topAnchor.constraint(equalTo: lessonView.titleLabel.bottomAnchor, constant: 20),
-            lessonView.collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            lessonView.collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            lessonView.collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
-        ])
+    @objc func openProfile() {
+        let profileScreen = ProfileViewController()
+        navigationController?.pushViewController(profileScreen, animated: true)
     }
     
-    private func setupCollectionView() {
-        lessonView.collectionView.delegate = self
-        lessonView.collectionView.dataSource = self
-    }
-    
-    private func setupBackButton() {
-        lessonView.backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-    }
-    
-    private func setupFavoritesButton() {
-        favoritesButton.addTarget(self, action: #selector(favoritesButtonTapped), for: .touchUpInside)
-    }
-    
-    @objc private func backButtonTapped() {
+    @objc func backBtnPressed() {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc private func favoritesButtonTapped() {
-        let favoritesVC = FavoritesViewController()
-        navigationController?.pushViewController(favoritesVC, animated: true)
-    }
-    
-    // MARK: - Navigation
-    private func navigateToLessonDetail(with lesson: Lesson, lessonNumber: Int) {
-        let lessonDetailVC = LessonDetailViewController()
-        lessonDetailVC.lesson = lesson
-        lessonDetailVC.lessonNumber = lessonNumber
-        navigationController?.pushViewController(lessonDetailVC, animated: true)
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-extension LessonViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return lessons.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: LessonCardCell.identifier,
-            for: indexPath
-        ) as? LessonCardCell else {
-            return UICollectionViewCell()
-        }
-        
-        let lesson = lessons[indexPath.item]
-        cell.configure(title: lesson.title, progressState: lesson.progressState, color: lesson.martialArt.color)
-        
-        return cell
-    }
-}
-
-// MARK: - UICollectionViewDelegate
-extension LessonViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedLesson = lessons[indexPath.item]
-        // Navigate to lesson detail screen instead of directly to practice
-        navigateToLessonDetail(with: selectedLesson, lessonNumber: indexPath.item + 1)
-    }
-}
-
-// MARK: - UICollectionViewDelegateFlowLayout
-extension LessonViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let padding: CGFloat = 16
-        let availableWidth = collectionView.bounds.width - padding
-        let itemWidth = availableWidth / 2
-        
-        return CGSize(width: itemWidth, height: 180)
+    @objc func startBtnPressed(){
+        let practiceScreen = PracticeViewController()
+        navigationController?.pushViewController(practiceScreen, animated: true)
     }
 }

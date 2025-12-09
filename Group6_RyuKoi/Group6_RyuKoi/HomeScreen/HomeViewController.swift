@@ -6,15 +6,13 @@
 //
 //MARK: TODO
 // need to add ability to "heart" a lesson to add to favorites // changed some stuff with bottom nav bar??? dunno how it works.
+// need to change table view to grid view for lessons//favorites//communities
 
 import UIKit
 
 class HomeViewController: UIViewController {
     let homeScreen = HomeView()
-    let navBar = TopNavigationBarView()
-    let bottomNavBar = BottomNavigationBarView()
-    var receivedCategory = "" // To be changed with the category...
-    let lessons = ["Lesson 1", "Lesson 2", "Lesson 3", "Lesson 4", "Lesson 5", "Lesson 6"]
+    var receivedCategory: Categories?
     
     override func loadView() {
         view = homeScreen
@@ -22,60 +20,61 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(navBar)
-        view.addSubview(bottomNavBar)
-        navBar.translatesAutoresizingMaskIntoConstraints = false
-        bottomNavBar.translatesAutoresizingMaskIntoConstraints = false
         navigationItem.hidesBackButton = true
-        // remove separator line between cells
-        homeScreen.tableViewLessons.separatorStyle = .none
         
-        NSLayoutConstraint.activate([
-            navBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 35),
-            navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            navBar.heightAnchor.constraint(equalToConstant: 60),
-            
-            bottomNavBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            bottomNavBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            bottomNavBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-        
-        navBar.account.addTarget(self, action: #selector(openProfile), for: .touchUpInside)
+        homeScreen.categoryLabel.text = receivedCategory?.name.rawValue
         
         //MARK: patching the table view delegate and datasource to controller...
-        homeScreen.tableViewLessons.delegate = self
-        homeScreen.tableViewLessons.dataSource = self
+        homeScreen.collectionViewLessons.delegate = self
+        homeScreen.collectionViewLessons.dataSource = self
+        
+        homeScreen.setAccountTarget(self, action: #selector(openProfile))
+        homeScreen.backBtn.addTarget(self, action: #selector(backBtnTapped), for: .touchUpInside)
     }
     
     @objc func openProfile() {
-        let profileVC = ProfileViewController()
-        navigationController?.pushViewController(profileVC, animated: true)
+        let profileScreen = ProfileViewController()
+        navigationController?.pushViewController(profileScreen, animated: true)
+    }
+    
+    @objc func backBtnTapped(){
+        navigationController?.popViewController(animated: true)
     }
 }
 
-extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return lessons.count
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        return receivedCategory?.lesson.count ?? 0
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "HomeLessonCell",
+            for: indexPath
+        ) as! HomeLessonCell
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "lessons", for: indexPath) as! HomeTableViewCell
-        
-        let leftIndex = indexPath.row * 2
-        let rightIndex = leftIndex + 1
-        
-        cell.leftLabel.text = lessons[leftIndex] // fix this somehow....
-        
-        if rightIndex < lessons.count {
-            cell.rightLessonView.isHidden = false
-            cell.rightLabel.text = lessons[rightIndex]
-        } else {
-            // Hide right box if odd number of lessons
-            cell.rightLessonView.isHidden = true
-        }
-        
+        let lesson = receivedCategory!.lesson[indexPath.row]
+        cell.configure(with: lesson)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let lessonViewController = LessonViewController()
+        lessonViewController.selectedLesson = receivedCategory?.lesson[indexPath.row]
+        navigationController?.pushViewController(lessonViewController, animated: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let spacing: CGFloat = 12
+        let totalSpacing = spacing * 3
+        let width = (collectionView.bounds.width - totalSpacing) / 2
+        
+        return CGSize(width: width, height: 150)
     }
 }

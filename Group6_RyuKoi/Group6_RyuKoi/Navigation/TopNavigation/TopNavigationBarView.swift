@@ -15,6 +15,7 @@ class TopNavigationBarView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
+        //self.backgroundColor = .gray.withAlphaComponent(0.2)
         setupLogo()
         setupSearchBar()
         setupAccount()
@@ -25,6 +26,7 @@ class TopNavigationBarView: UIView {
         logo = UIButton(type: .custom)
         logo.setImage(UIImage(named: "Logo"), for: .normal)
         logo.imageView?.contentMode = .scaleAspectFit
+        //logo.backgroundColor = .blue.withAlphaComponent(0.3)
         logo.translatesAutoresizingMaskIntoConstraints = false
         addSubview(logo)
     }
@@ -32,9 +34,11 @@ class TopNavigationBarView: UIView {
     func setupSearchBar() {
         searchBar = UISearchBar()
         searchBar.placeholder = "Search lessons..."
-        //searchBar.isUserInteractionEnabled = false
-        searchBar.layer.cornerRadius = 10
-        searchBar.backgroundColor = UIColor(red: 1.0, green: 248/255, blue: 232/255, alpha: 1.0)
+        searchBar.backgroundImage = UIImage()
+        searchBar.searchBarStyle = .minimal
+        searchBar.searchTextField.backgroundColor = UIColor(red: 1.0, green: 248/255, blue: 232/255, alpha: 1.0)
+        searchBar.searchTextField.layer.cornerRadius = 20
+        searchBar.searchTextField.clipsToBounds = true
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         addSubview(searchBar)
     }
@@ -42,30 +46,30 @@ class TopNavigationBarView: UIView {
     func setupAccount() {
         account = UIButton(type: .system)
         account.setImage(UIImage(systemName: "person.crop.circle"), for: .normal)
+        account.imageView?.contentMode = .scaleAspectFit
         account.tintColor = .black
-        //account.imageView?.contentMode = .scaleAspectFit
         account.translatesAutoresizingMaskIntoConstraints = false
         addSubview(account)
     }
     
     func initConstraints() {
         NSLayoutConstraint.activate([
-            logo.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            logo.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             logo.centerYAnchor.constraint(equalTo: centerYAnchor),
-            logo.widthAnchor.constraint(equalToConstant: 40),
-            logo.heightAnchor.constraint(equalToConstant: 40),
+            logo.widthAnchor.constraint(equalToConstant: 50),
+            logo.heightAnchor.constraint(equalToConstant: 50),
             
-            account.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            account.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             account.centerYAnchor.constraint(equalTo: centerYAnchor),
             account.widthAnchor.constraint(equalToConstant: 50),
             account.heightAnchor.constraint(equalToConstant: 50),
             
-            searchBar.leadingAnchor.constraint(equalTo: logo.trailingAnchor, constant: 12),
-            searchBar.trailingAnchor.constraint(equalTo: account.leadingAnchor, constant: -12),
+            searchBar.leadingAnchor.constraint(equalTo: logo.trailingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: account.leadingAnchor),
             searchBar.centerYAnchor.constraint(equalTo: centerYAnchor),
-            searchBar.heightAnchor.constraint(equalToConstant: 36),
-
+            searchBar.heightAnchor.constraint(equalToConstant: 50)
         ])
+        
     }
     
     required init?(coder: NSCoder) {

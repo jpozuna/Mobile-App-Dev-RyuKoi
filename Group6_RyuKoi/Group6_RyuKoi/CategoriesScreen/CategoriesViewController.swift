@@ -6,63 +6,57 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class CategoriesViewController: UIViewController {
-    let categoriesScreen = CategoriesView()
-    let navBar = TopNavigationBarView()
-    
     //MARK: list to display the category names in the TableView...
-    let categoryNames = ["Taekwondo", "Karate", "Boxing", "Jujutsu", "Other"]
+    var categoryNames = ["Taekwondo", "Karate", "Boxing", "Jujutsu", "Other"]
+    var handleAuth: AuthStateDidChangeListenerHandle?
+    var currentUser: FirebaseAuth.User?
+    let categoriesScreen = CategoriesView()
     
     override func loadView() {
         view = categoriesScreen
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(navBar)
-        navBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationController?.navigationBar.isHidden = true
         navigationItem.hidesBackButton = true
+        navigationItem.largeTitleDisplayMode = .never
         
         // remove separator line between cells
         categoriesScreen.tableViewCategories.separatorStyle = .none
         
-        NSLayoutConstraint.activate([
-            navBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 35), //????
-            navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            navBar.heightAnchor.constraint(equalToConstant: 60)
-        ])
-        
-        
-        navBar.account.addTarget(self, action: #selector(openProfile), for: .touchUpInside)
-        
         //MARK: patching the table view delegate and datasource to controller...
         categoriesScreen.tableViewCategories.delegate = self
         categoriesScreen.tableViewCategories.dataSource = self
+        
+        categoriesScreen.setAccountTarget(self, action: #selector(openProfile))
     }
     
     @objc func openProfile() {
-        let profileVC = ProfileViewController()
-        navigationController?.pushViewController(profileVC, animated: true)
+        let profileScreen = ProfileViewController()
+        navigationController?.pushViewController(profileScreen, animated: true)
     }
 }
 
 extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryNames.count
+        return mockCategories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "categories", for: indexPath) as! CategoriesTableViewCell
-        cell.categoryLabel.text = categoryNames[indexPath.row]
+        cell.categoryLabel.text = mockCategories[indexPath.row].name.rawValue
         return cell
     }
     
     //MARK: deal with user interaction with a cell...
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let homeController = HomeViewController()
-        homeController.receivedCategory = self.categoryNames[indexPath.row]
+        homeController.receivedCategory = mockCategories[indexPath.row]
         navigationController?.pushViewController(homeController, animated: true)
     }
 }

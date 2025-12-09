@@ -9,6 +9,12 @@ import UIKit
 class FavoritesView: UIView {
     
     // MARK: - UI Components
+    private let navBar: TopNavigationBarView = {
+        let navBar = TopNavigationBarView()
+        navBar.translatesAutoresizingMaskIntoConstraints = false
+        return navBar
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Favorites"
@@ -27,7 +33,7 @@ class FavoritesView: UIView {
         layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(FavoriteCardCell.self, forCellWithReuseIdentifier: "FavoriteCardCell")
         return collectionView
@@ -82,8 +88,9 @@ class FavoritesView: UIView {
     
     // MARK: - Setup
     private func setupUI() {
-        backgroundColor = .systemBackground
+        backgroundColor = UIColor(red: 1.0, green: 0.953, blue: 0.851, alpha: 1.0)
         
+        addSubview(navBar)
         addSubview(titleLabel)
         addSubview(collectionView)
         addSubview(emptyStateView)
@@ -97,8 +104,14 @@ class FavoritesView: UIView {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            
+            navBar.topAnchor.constraint(equalTo: self.topAnchor ,constant: 70),
+            navBar.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            navBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            navBar.heightAnchor.constraint(equalToConstant: 60),
+            
             // Title Label
-            titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             
@@ -138,181 +151,8 @@ class FavoritesView: UIView {
         emptyStateView.isHidden = !show
         collectionView.isHidden = show
     }
-}
-
-// MARK: - Favorite Card Cell
-class FavoriteCardCell: UICollectionViewCell {
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemGray5
-        view.layer.cornerRadius = 16
-        view.layer.masksToBounds = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let starIcon: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "star.fill")
-        imageView.tintColor = .systemYellow
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Title"
-        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        label.textColor = .label
-        label.textAlignment = .center
-        label.numberOfLines = 2
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let progressBarBackground: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemGray4
-        view.layer.cornerRadius = 4
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let progressBarFill: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemGreen
-        view.layer.cornerRadius = 4
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let progressLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .secondaryLabel
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private var progressBarFillWidthConstraint: NSLayoutConstraint?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
+    func setAccountTarget(_ target: Any?, action: Selector) {
+        navBar.account.addTarget(target, action: action, for: .touchUpInside)
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupUI() {
-        contentView.addSubview(containerView)
-        containerView.addSubview(starIcon)
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(progressBarBackground)
-        progressBarBackground.addSubview(progressBarFill)
-        containerView.addSubview(progressLabel)
-        
-        progressBarFillWidthConstraint = progressBarFill.widthAnchor.constraint(equalToConstant: 0)
-        
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
-            starIcon.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12),
-            starIcon.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
-            starIcon.widthAnchor.constraint(equalToConstant: 28),
-            starIcon.heightAnchor.constraint(equalToConstant: 28),
-            
-            titleLabel.topAnchor.constraint(equalTo: starIcon.bottomAnchor, constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
-            
-            progressBarBackground.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            progressBarBackground.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-            progressBarBackground.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-            progressBarBackground.heightAnchor.constraint(equalToConstant: 8),
-            
-            progressBarFill.topAnchor.constraint(equalTo: progressBarBackground.topAnchor),
-            progressBarFill.leadingAnchor.constraint(equalTo: progressBarBackground.leadingAnchor),
-            progressBarFill.bottomAnchor.constraint(equalTo: progressBarBackground.bottomAnchor),
-            progressBarFillWidthConstraint!,
-            
-            progressLabel.topAnchor.constraint(equalTo: progressBarBackground.bottomAnchor, constant: 8),
-            progressLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            progressLabel.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -12)
-        ])
-    }
-    
-    func configure(with lesson: FavoriteLesson) {
-        titleLabel.text = lesson.title
-        progressLabel.text = "\(lesson.progressPercentage)% Complete"
-        
-        // Animate progress bar fill
-        let targetWidth = progressBarBackground.bounds.width * (CGFloat(lesson.progressPercentage) / 100.0)
-        progressBarFillWidthConstraint?.constant = targetWidth
-        
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
-            self.layoutIfNeeded()
-        }
-        
-        // Change progress bar color based on completion
-        if lesson.progressPercentage == 100 {
-            progressBarFill.backgroundColor = .systemGreen
-        } else if lesson.progressPercentage >= 50 {
-            progressBarFill.backgroundColor = .systemBlue
-        } else {
-            progressBarFill.backgroundColor = .systemOrange
-        }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        // Update progress bar width when layout changes
-        if let lesson = currentLesson {
-            let targetWidth = progressBarBackground.bounds.width * (CGFloat(lesson.progressPercentage) / 100.0)
-            progressBarFillWidthConstraint?.constant = targetWidth
-        }
-    }
-    
-    private var currentLesson: FavoriteLesson?
-    
-    func configure(with lesson: FavoriteLesson, animated: Bool = true) {
-        currentLesson = lesson
-        titleLabel.text = lesson.title
-        progressLabel.text = "\(lesson.progressPercentage)% Complete"
-        
-        // Update progress bar
-        let targetWidth = progressBarBackground.bounds.width * (CGFloat(lesson.progressPercentage) / 100.0)
-        
-        if animated {
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
-                self.progressBarFillWidthConstraint?.constant = targetWidth
-                self.layoutIfNeeded()
-            }
-        } else {
-            progressBarFillWidthConstraint?.constant = targetWidth
-        }
-        
-        // Change progress bar color based on completion
-        if lesson.progressPercentage == 100 {
-            progressBarFill.backgroundColor = .systemGreen
-        } else if lesson.progressPercentage >= 50 {
-            progressBarFill.backgroundColor = .systemBlue
-        } else {
-            progressBarFill.backgroundColor = .systemOrange
-        }
-    }
-}
-
-// MARK: - Model
-struct FavoriteLesson {
-    let id: String
-    let title: String
-    let progressPercentage: Int // 0-100
 }

@@ -9,6 +9,7 @@ import UIKit
 
 class SignInViewController: UIViewController {
     let signinScreen = SignInView()
+    let childProgressView = ProgressSpinnerViewController()
     
     override func loadView() {
         view = signinScreen
@@ -16,7 +17,7 @@ class SignInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Sign In"
+        title = "Sign Up"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.hidesBackButton = true
 
@@ -26,9 +27,7 @@ class SignInViewController: UIViewController {
     }
     
     @objc func handleSignIn() {
-        let preferenceScreen = PreferenceViewController()
-        navigationController?.pushViewController(preferenceScreen, animated: true)
-
+        registerNewAccount()
     }
     
     @objc func handleLogin() {
