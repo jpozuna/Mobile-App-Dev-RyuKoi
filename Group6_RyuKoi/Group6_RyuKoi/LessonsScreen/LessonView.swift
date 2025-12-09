@@ -3,8 +3,6 @@ import UIKit
 class LessonView: UIView {
     var backBtn: UIButton!
     var navBar: TopNavigationBarView!
-    var progressBarBackground: UIView!
-    var progressBarFill: UIView!
     var lessonName: UILabel!
     var descriptionContainer: UIView!
     var descriptionLabel: UILabel!
@@ -15,7 +13,6 @@ class LessonView: UIView {
         backgroundColor = UIColor(red: 1.0, green: 0.953, blue: 0.851, alpha: 1.0)
         setupBackBtn()
         setupNavBar()
-        setupProgressBar()
         setupLessonName()
         setupDescriptionContainer()
         setupDescriptionLabel()
@@ -35,22 +32,6 @@ class LessonView: UIView {
         navBar = TopNavigationBarView()
         navBar.translatesAutoresizingMaskIntoConstraints = false
         addSubview(navBar)
-    }
-    
-    func setupProgressBar() {
-        // Background bar
-        progressBarBackground = UIView()
-        progressBarBackground.backgroundColor = UIColor.black.withAlphaComponent(0.25)
-        progressBarBackground.layer.cornerRadius = 5
-        progressBarBackground.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(progressBarBackground)
-        
-        // Fill bar (progress indicator)
-        progressBarFill = UIView()
-        progressBarFill.backgroundColor = UIColor(red: 220/255, green: 71/255, blue: 49/255, alpha: 1.0)
-        progressBarFill.layer.cornerRadius = 5
-        progressBarFill.translatesAutoresizingMaskIntoConstraints = false
-        progressBarBackground.addSubview(progressBarFill)
     }
     
     func setupLessonName() {
@@ -101,18 +82,7 @@ class LessonView: UIView {
             navBar.centerYAnchor.constraint(equalTo: backBtn.centerYAnchor),
             navBar.heightAnchor.constraint(equalToConstant: 60),
             
-            progressBarBackground.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 20),
-            progressBarBackground.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            progressBarBackground.widthAnchor.constraint(equalToConstant: 300),
-            progressBarBackground.heightAnchor.constraint(equalToConstant: 10),
-
-            
-            progressBarFill.leadingAnchor.constraint(equalTo: progressBarBackground.leadingAnchor),
-            progressBarFill.topAnchor.constraint(equalTo: progressBarBackground.topAnchor),
-            progressBarFill.bottomAnchor.constraint(equalTo: progressBarBackground.bottomAnchor),
-            progressBarFill.widthAnchor.constraint(equalToConstant: 0),
-            
-            lessonName.topAnchor.constraint(equalTo: progressBarBackground.bottomAnchor, constant: 20),
+            lessonName.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 20),
             lessonName.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
             descriptionContainer.topAnchor.constraint(equalTo: lessonName.bottomAnchor, constant: 20),
