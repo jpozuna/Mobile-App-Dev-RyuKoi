@@ -27,9 +27,17 @@ class HomeLessonCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    private let starIcon: UIImageView = {
+    /*
+    public let starIcon: UIImageView = {
         let iv = UIImageView()
+        iv.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
+        iv.contentMode = .scaleAspectFit
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()*/
+    
+    public let starIcon: UIButton = {
+        let iv = UIButton()
         iv.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -178,7 +186,7 @@ class HomeLessonCell: UICollectionViewCell {
         progressLabel.text = "\(lesson.progressPercentage)% Complete"
         
         // Star icon depends on favorite
-        starIcon.image = UIImage(systemName: "star")
+        starIcon.setImage(UIImage(systemName: "star"), for: .normal)
         starIcon.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
         
         updateProgress(percentage: lesson.progressPercentage, animated: true)

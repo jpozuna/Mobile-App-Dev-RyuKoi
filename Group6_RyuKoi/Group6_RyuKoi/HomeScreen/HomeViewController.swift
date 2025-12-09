@@ -9,10 +9,16 @@
 // need to change table view to grid view for lessons//favorites//communities
 
 import UIKit
+import FirebaseAuth
+import FirebaseFirestore
 
 class HomeViewController: UIViewController {
     let homeScreen = HomeView()
     var receivedCategory: Categories?
+    let database = Firestore.firestore()
+    var favoritesList: [Lesson] = []
+    var currentUser:FirebaseAuth.User?
+    
     
     override func loadView() {
         view = homeScreen
@@ -43,7 +49,6 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         return receivedCategory?.lesson.count ?? 0
@@ -58,12 +63,49 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
         let lesson = receivedCategory!.lesson[indexPath.row]
         cell.configure(with: lesson)
+        cell.starIcon.tag = indexPath.row
+        cell.starIcon.addTarget(self, action: #selector(handleStarTapped(_:)), for: .touchUpInside)
         return cell
+    }
+    
+    @objc func handleStarTapped(_ sender: UIButton) {
+        let row = sender.tag
+        guard let lesson = receivedCategory?.lesson[row] else { return }
+        
+        // Toggle the button state
+        sender.isSelected.toggle()
+                    
+        // Update button image
+        if sender.isSelected {
+            sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            favoritesList.append(receivedCategory!.lesson[row])
+            updateFavoritesToUser()
+            
+        } else {
+            sender.setImage(UIImage(systemName: "star"), for: .normal)
+        }
+    }
+    
+    func updateFavoritesToUser() {
+        guard let currentUserEmail = Auth.auth().currentUser?.email else { return }
+            
+        database.collection("users")
+            .document(currentUserEmail)
+            .updateData([
+                "favoriteLessons": FieldValue.arrayUnion([favoritesList])
+            ]) { error in
+                if let error = error {
+                    print("Failed to update favorites")
+                } else {
+                    print("updated fav")
+                }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let lessonViewController = LessonViewController()
-        lessonViewController.selectedLesson = receivedCategory?.lesson[indexPath.row]
+        let selectedLesson = receivedCategory?.lesson[indexPath.row]
+        lessonViewController.selectedLesson = selectedLesson
         navigationController?.pushViewController(lessonViewController, animated: true)
     }
     
