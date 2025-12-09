@@ -34,7 +34,6 @@ class SignInView: UIView {
         firstName = UITextField()
         firstName.placeholder = "First Name"
         firstName.borderStyle = .roundedRect
-        firstName.textColor = .lightGray
         firstName.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(firstName)
     }
@@ -43,7 +42,6 @@ class SignInView: UIView {
         lastName = UITextField()
         lastName.placeholder = "Last Name"
         lastName.borderStyle = .roundedRect
-        lastName.textColor = .lightGray
         lastName.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(lastName)
     }
@@ -52,7 +50,6 @@ class SignInView: UIView {
         email = UITextField()
         email.placeholder = "Email"
         email.borderStyle = .roundedRect
-        email.textColor = .lightGray
         email.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(email)
     }
@@ -62,7 +59,6 @@ class SignInView: UIView {
         password.placeholder = "Password"
         password.borderStyle = .roundedRect
         password.isSecureTextEntry = true
-        password.textColor = .lightGray
         password.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(password)
     }

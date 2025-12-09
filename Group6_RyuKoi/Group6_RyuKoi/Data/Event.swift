@@ -14,11 +14,12 @@ struct Event: Codable {
     var date: String
     var time: String
     var comments: [Comment] = []
+    var followers: [String] = []
 }
 
 
 struct Comment: Codable {
-    var userName: User
+    var userName: String
     var text: String
     var Date: Date
 }

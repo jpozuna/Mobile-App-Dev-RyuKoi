@@ -7,11 +7,14 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class ProfileViewController: UIViewController {
     let profileScreen = ProfileView()
     var currentUser:FirebaseAuth.User?
-
+    var notifications: [Notifications] = []
+    
+    
     override func loadView() {
         view = profileScreen
     }
@@ -29,6 +32,8 @@ class ProfileViewController: UIViewController {
         
         profileScreen.notificationTableView.dataSource = self
         profileScreen.notificationTableView.delegate = self
+        
+        loadUserNotifications()
         
         profileScreen.backBtn.addTarget(self, action: #selector(backBtnTapped), for: .touchUpInside)
         profileScreen.logout.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
@@ -70,22 +75,55 @@ class ProfileViewController: UIViewController {
         present(alert, animated: true)
     }
     
+    func loadUserNotifications() {
+        guard let email = Auth.auth().currentUser?.email else { return }
+        
+        Firestore.firestore()
+            .collection("users")
+            .document(email)
+            .getDocument { document, error in
+                
+                if let data = document?.data(),
+                   let notifArray = data["notifications"] as? [[String: Any]] {
+                    
+                    self.notifications = notifArray.compactMap { dict in
+                        guard let title = dict["title"] as? String,
+                              let message = dict["message"] as? String,
+                              let timestamp = dict["date"] as? Timestamp else { return nil }
+                        
+                        return Notifications(
+                            title: title,
+                            message: message,
+                            date: timestamp.dateValue()
+                        )
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.profileScreen.notificationTableView.reloadData()
+                    }
+                }
+            }
+    }
+    
+    
 }
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return notifications.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "notification", for: indexPath) as! TableViewNotificationCell
-        //        cell.labelTitle.text = expenses[indexPath.row].title
-        //        if let uwAmount = expenses[indexPath.row].amount{
-        //            cell.labelAmount.text = "Cost: $\(uwAmount)"
-        //        }
-        //        if let uwType = expenses[indexPath.row].type{
-        //            cell.labelType.text = "Type: \(uwType)"
-        //        }
+        let notif = notifications[indexPath.row]
+        
+        cell.eventName.text = notif.title
+        cell.messageText.text = notif.message
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d, yyyy h:mm a"
+        cell.date.text = formatter.string(from: notif.date)
+        
         return cell
     }
 }

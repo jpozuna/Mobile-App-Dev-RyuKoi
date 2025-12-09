@@ -47,7 +47,7 @@ class LoginView: UIView {
         password.placeholder = "Password"
         password.borderStyle = .roundedRect
         password.autocapitalizationType = .none
-        password.isHidden = true
+        password.isSecureTextEntry = true
         password.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(password)
     }

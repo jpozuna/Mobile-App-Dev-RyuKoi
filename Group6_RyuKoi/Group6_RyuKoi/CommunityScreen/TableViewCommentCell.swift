@@ -15,7 +15,7 @@ class TableViewCommentCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = UIColor(red: 220/255, green: 71/255, blue: 49/255, alpha: 0.53)
+        backgroundColor = .clear
         setupWrapperCellView()
         setupName()
         setupComment()
@@ -25,29 +25,30 @@ class TableViewCommentCell: UITableViewCell {
     }
     
     func setupWrapperCellView(){
-        wrapperCellView = UITableViewCell()
-        wrapperCellView.layer.cornerRadius = 13
+        wrapperCellView = UIView()
+        wrapperCellView.layer.cornerRadius = 12
+        wrapperCellView.clipsToBounds = true
+        wrapperCellView.backgroundColor = UIColor(red: 220/255, green: 71/255, blue: 49/255, alpha: 0.53)
         wrapperCellView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(wrapperCellView)
     }
     
     func setupName(){
         name = UILabel()
-        name.text = "Name"
+        name.font = .boldSystemFont(ofSize: 16)
         name.translatesAutoresizingMaskIntoConstraints = false
         wrapperCellView.addSubview(name)
     }
     
     func setupComment(){
         comment = UILabel()
-        comment.text = "User Comment on the event"
         comment.translatesAutoresizingMaskIntoConstraints = false
         wrapperCellView.addSubview(comment)
     }
     
     func setupDate(){
         date = UILabel()
-        date.text = "11/16/2025"
+        date.font = .italicSystemFont(ofSize: 12)
         date.translatesAutoresizingMaskIntoConstraints = false
         wrapperCellView.addSubview(date)
     }
@@ -68,7 +69,7 @@ class TableViewCommentCell: UITableViewCell {
                 date.topAnchor.constraint(equalTo: comment.bottomAnchor, constant: 10),
                 date.trailingAnchor.constraint(equalTo: wrapperCellView.trailingAnchor, constant: -5),
                 
-                wrapperCellView.heightAnchor.constraint(equalToConstant: 100)
+                wrapperCellView.heightAnchor.constraint(equalToConstant: 70)
             ])
         }
     

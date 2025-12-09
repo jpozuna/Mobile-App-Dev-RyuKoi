@@ -59,6 +59,7 @@ extension SignInViewController{
     
     //MARK: creates new user with email and password
     func registerNewAccount(){
+        showActivityIndicator()
         if let first = signinScreen.firstName.text,
            let last = signinScreen.lastName.text,
            let email = signinScreen.email.text,
@@ -86,7 +87,10 @@ extension SignInViewController{
             .setData([
                 "name": user.name,
                 "email": user.email,
-                "password": user.password
+                "password": user.password,
+                "favoriteLessons": [],
+                "notifications": [],
+                "lessonProgress": []
             ]) { error in
                 if error != nil {
                     print("Error adding user to Firestore")
@@ -105,7 +109,7 @@ extension SignInViewController{
                 print("Error occured: \(error)")
                 return
             }
-            
+            self.hideActivityIndicator()
             let bottomNav = BottomNavigationViewController()
             self.navigationController?.pushViewController(bottomNav, animated: true)
         }

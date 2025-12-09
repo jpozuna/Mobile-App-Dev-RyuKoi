@@ -9,6 +9,7 @@ import UIKit
 
 class SignInViewController: UIViewController {
     let signinScreen = SignInView()
+    let childProgressView = ProgressSpinnerViewController()
     
     override func loadView() {
         view = signinScreen

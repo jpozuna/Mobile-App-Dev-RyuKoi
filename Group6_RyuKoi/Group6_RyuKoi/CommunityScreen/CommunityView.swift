@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CommunityView: UIView {
+class CommunityView: UIView, UITextViewDelegate {
     var backBtn: UIButton!
     var navBar: TopNavigationBarView!
     var eventNameContainer: UIView!
@@ -111,6 +111,7 @@ class CommunityView: UIView {
         commentsTableView = UITableView()
         commentsTableView.register(TableViewCommentCell.self, forCellReuseIdentifier: "comment")
         commentsTableView.backgroundColor = .clear
+        commentsTableView.sectionFooterHeight = 20
         commentsTableView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(commentsTableView)
     }
@@ -126,15 +127,16 @@ class CommunityView: UIView {
     
     func setupMessage() {
         message = UITextView()
-        message.backgroundColor = UIColor(red: 220/255, green: 71/255, blue: 49/255, alpha: 0.57)
-        message.font = UIFont.systemFont(ofSize: 16)
-        message.textColor = .black
-        message.isScrollEnabled = false
-        message.layer.cornerRadius = 8
         message.translatesAutoresizingMaskIntoConstraints = false
+        message.autocorrectionType = .no
+        message.autocapitalizationType = .sentences
+        message.backgroundColor = UIColor(red: 220/255, green: 71/255, blue: 49/255, alpha: 0.57)
+        message.returnKeyType = .default
+        message.font = .systemFont(ofSize: 16)
+        message.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        message.layer.cornerRadius = 8
         addSubview(message)
     }
-    
     
     func initConstraints() {
         NSLayoutConstraint.activate([
@@ -167,13 +169,13 @@ class CommunityView: UIView {
             bio.trailingAnchor.constraint(equalTo: bioContainer.trailingAnchor, constant: -16),
             bio.topAnchor.constraint(equalTo: date.bottomAnchor, constant: 10),
             
-            notificationBtn.trailingAnchor.constraint(equalTo: bioContainer.trailingAnchor, constant: -10),
+            notificationBtn.trailingAnchor.constraint(equalTo: bioContainer.trailingAnchor, constant: -5),
             notificationBtn.widthAnchor.constraint(equalToConstant: 50),
             notificationBtn.heightAnchor.constraint(equalToConstant: 50),
             
             date.topAnchor.constraint(equalTo: bioContainer.topAnchor, constant: 16),
             notificationBtn.topAnchor.constraint(equalTo: bio.bottomAnchor, constant: 10),
-            notificationBtn.bottomAnchor.constraint(equalTo: bioContainer.bottomAnchor, constant: -16),
+            notificationBtn.bottomAnchor.constraint(equalTo: bioContainer.bottomAnchor, constant: -5),
             
             commentsTableView.topAnchor.constraint(equalTo: bioContainer.bottomAnchor, constant: 16),
             commentsTableView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -189,15 +191,15 @@ class CommunityView: UIView {
             message.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -25),
             message.leadingAnchor.constraint(equalTo: sendBtn.trailingAnchor, constant: 15),
             message.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            message.heightAnchor.constraint(equalToConstant: 150),
-            
+            message.heightAnchor.constraint(greaterThanOrEqualToConstant: 40),
+            message.heightAnchor.constraint(lessThanOrEqualToConstant: 120),
         ])
     }
     
     func setAccountTarget(_ target: Any?, action: Selector) {
         navBar.account.addTarget(target, action: action, for: .touchUpInside)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

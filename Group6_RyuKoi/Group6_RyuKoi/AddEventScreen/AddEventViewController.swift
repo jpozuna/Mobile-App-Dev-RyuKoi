@@ -51,7 +51,7 @@ class AddEventViewController: UIViewController {
             return
         }
         
-        let newEvent = Event(name: name, bio: bio, organizer: organizer, date: date, time: time, comments: [])
+        let newEvent = Event(name: name, bio: bio, organizer: organizer, date: date, time: time, comments: [], followers: [])
         saveEventToFireStore(event: newEvent, userEmail: organizer.lowercased())
     }
     
@@ -75,7 +75,8 @@ class AddEventViewController: UIViewController {
                 "organizer": userEmail,
                 "date": event.date,
                 "time": event.time,
-                "comments": []
+                "comments": [],
+                "followers": []
             ]){ error in
                 if error != nil {
                     print("Error adding event to Firestore")
