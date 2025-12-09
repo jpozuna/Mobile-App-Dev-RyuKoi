@@ -11,7 +11,7 @@ import FirebaseFirestore
 
 extension SignInViewController{
     //MARK: checks to see if inputs are either empty or valid and throws alert
-    func isValid(name: String, email: String, password: String, verifyPassword: String){
+    func isValid(name: String, email: String, password: String){
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         let emailPred = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
         
@@ -19,7 +19,7 @@ extension SignInViewController{
         let passwordPred = NSPredicate(format:"SELF MATCHES %@", passwordRegEx)
         
         
-        if name.isEmpty || email.isEmpty || password.isEmpty || verifyPassword.isEmpty{
+        if name.isEmpty || email.isEmpty || password.isEmpty{
             emptyAlert()
             return
         }
@@ -64,10 +64,12 @@ extension SignInViewController{
            let last = signinScreen.lastName.text,
            let email = signinScreen.email.text,
            let password = signinScreen.password.text{
+            let fullName = "\(first) \(last)"
+            isValid(name: fullName, email: email, password: password)
             Auth.auth().createUser(withEmail: email, password: password, completion: {result, error in
+                self.hideActivityIndicator()
                 if error == nil{
                     //MARK: the user creation is successful...
-                    let fullName = "\(first) \(last)"
                     self.setNameOfTheUserInFirebaseAuth(name: fullName)
                     let newUser = User(name: fullName, email: email, password: password, favoriteLessons: [], notifications: [], lessonProgress: [])
                     self.saveUserToFireStore(user: newUser)

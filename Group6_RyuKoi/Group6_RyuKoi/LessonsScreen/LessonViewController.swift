@@ -15,6 +15,9 @@ class LessonViewController: UIViewController {
         navigationItem.hidesBackButton = true
         navigationItem.largeTitleDisplayMode = .never
         
+        lessonScreen.descriptionLabel.text = selectedLesson?.description
+        lessonScreen.lessonName.text = selectedLesson?.title
+        
         lessonScreen.setAccountTarget(self, action: #selector(openProfile))
         lessonScreen.backBtn.addTarget(self, action: #selector(backBtnPressed), for: .touchUpInside)
         lessonScreen.startBtn.addTarget(self, action: #selector(startBtnPressed), for: .touchUpInside)
