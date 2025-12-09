@@ -3,6 +3,7 @@ import UIKit
 
 class LessonViewController: UIViewController {
     let lessonScreen = LessonView()
+    var selectedLesson: Lesson?
     
     override func loadView() {
         self.view = lessonScreen
