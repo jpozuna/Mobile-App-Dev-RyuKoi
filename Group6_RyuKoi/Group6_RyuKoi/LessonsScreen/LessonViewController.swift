@@ -34,6 +34,7 @@ class LessonViewController: UIViewController {
     
     @objc func startBtnPressed(){
         let practiceScreen = PracticeViewController()
+        practiceScreen.lesson = selectedLesson
         navigationController?.pushViewController(practiceScreen, animated: true)
     }
 }

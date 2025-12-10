@@ -1,10 +1,3 @@
-//
-//  PracticeView.swift
-//  Group6_RyuKoi
-//
-//  Created by Joshua Paulino Ozuna on 11/17/25.
-//
-
 import UIKit
 
 class PracticeView: UIView {
@@ -14,62 +7,69 @@ class PracticeView: UIView {
     let backButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-        button.tintColor = .black
+        button.tintColor = .label
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    let progressLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Progress"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        label.textAlignment = .center
-        label.backgroundColor = .lightGray.withAlphaComponent(0.3)
-        label.layer.cornerRadius = 8
-        label.clipsToBounds = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let contentCard: UIView = {
-        let view = UIView()
-        view.backgroundColor = .lightGray.withAlphaComponent(0.3)
-        view.layer.cornerRadius = 12
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
+    // Camera view (no container around it now)
     let lessonImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .black
-        imageView.layer.cornerRadius = 8
+        imageView.layer.cornerRadius = 12
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
+    // Done button - replaces the next/complete button
+    let doneButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Done", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
+        button.layer.cornerRadius = 8
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    // Navigation buttons (kept for compatibility but hidden)
     let previousButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "backward.end.fill"), for: .normal)
-        button.tintColor = .black
+        button.tintColor = .label
         button.imageView?.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isHidden = true
         return button
     }()
     
     let nextButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "forward.end.fill"), for: .normal)
-        button.tintColor = .black
+        button.tintColor = .label
         button.imageView?.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isHidden = true // Hidden - we use doneButton instead
         return button
+    }()
+    
+    // Progress label (kept for compatibility but hidden)
+    let progressLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
+        return label
     }()
     
     let tipsCard: UIView = {
         let view = UIView()
-        view.backgroundColor = .lightGray.withAlphaComponent(0.3)
+        view.backgroundColor = UIColor(red: 1.0, green: 0.973, blue: 0.910, alpha: 1.0)
         view.layer.cornerRadius = 12
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -85,7 +85,7 @@ class PracticeView: UIView {
     let tipsLabel: UILabel = {
         let label = UILabel()
         label.text = "Tips:"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = false
         return label
@@ -94,7 +94,7 @@ class PracticeView: UIView {
     let tipsChevronIcon: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "chevron.down")
-        imageView.tintColor = .black
+        imageView.tintColor = .label
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -110,11 +110,11 @@ class PracticeView: UIView {
     
     let tipsTextView: UITextView = {
         let textView = UITextView()
-        textView.font = UIFont.systemFont(ofSize: 14)
+        textView.font = UIFont.systemFont(ofSize: 15)
         textView.isEditable = false
         textView.isScrollEnabled = true
         textView.backgroundColor = .clear
-        textView.textContainerInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 4, bottom: 12, right: 4)
         textView.textContainer.lineFragmentPadding = 0
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
@@ -137,20 +137,23 @@ class PracticeView: UIView {
     // MARK: - Setup
     
     private func setupView() {
-        backgroundColor = .white
+        // App background color - cream/beige
+        backgroundColor = UIColor(red: 1.0, green: 0.953, blue: 0.851, alpha: 1.0)
         
         addSubview(backButton)
-        addSubview(progressLabel)
-        addSubview(contentCard)
-        contentCard.addSubview(lessonImageView)
-        addSubview(previousButton)
-        addSubview(nextButton)
+        addSubview(lessonImageView)
+        addSubview(doneButton)
         addSubview(tipsCard)
         tipsCard.addSubview(tipsHeaderButton)
         tipsCard.addSubview(tipsLabel)
         tipsCard.addSubview(tipsChevronIcon)
         tipsCard.addSubview(tipsContentView)
         tipsContentView.addSubview(tipsTextView)
+        
+        // Add hidden elements for compatibility
+        addSubview(progressLabel)
+        addSubview(nextButton)
+        addSubview(previousButton)
         
         setupConstraints()
     }
@@ -165,47 +168,29 @@ class PracticeView: UIView {
             backButton.widthAnchor.constraint(equalToConstant: 30),
             backButton.heightAnchor.constraint(equalToConstant: 30),
             
-            // Progress label
-            progressLabel.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 16),
-            progressLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            progressLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            progressLabel.heightAnchor.constraint(equalToConstant: 40),
+            // Camera view - starts right after back button
+            lessonImageView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 20),
+            lessonImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            lessonImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            lessonImageView.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 0.75),
             
-            // Content card
-            contentCard.topAnchor.constraint(equalTo: progressLabel.bottomAnchor, constant: 16),
-            contentCard.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            contentCard.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            contentCard.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1.1),
+            // Done button - right aligned, above tips
+            doneButton.topAnchor.constraint(equalTo: lessonImageView.bottomAnchor, constant: 20),
+            doneButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            doneButton.widthAnchor.constraint(equalToConstant: 100),
+            doneButton.heightAnchor.constraint(equalToConstant: 44),
             
-            // Lesson image
-            lessonImageView.centerYAnchor.constraint(equalTo: contentCard.centerYAnchor),
-            lessonImageView.centerXAnchor.constraint(equalTo: contentCard.centerXAnchor),
-            lessonImageView.widthAnchor.constraint(equalTo: contentCard.widthAnchor, multiplier: 0.85),
-            lessonImageView.heightAnchor.constraint(equalTo: lessonImageView.widthAnchor, multiplier: 1.0),
-            
-            // Previous button
-            previousButton.topAnchor.constraint(equalTo: contentCard.bottomAnchor, constant: 16),
-            previousButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
-            previousButton.widthAnchor.constraint(equalToConstant: 40),
-            previousButton.heightAnchor.constraint(equalToConstant: 40),
-            
-            // Next button
-            nextButton.topAnchor.constraint(equalTo: contentCard.bottomAnchor, constant: 16),
-            nextButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
-            nextButton.widthAnchor.constraint(equalToConstant: 40),
-            nextButton.heightAnchor.constraint(equalToConstant: 40),
-            
-            // Tips card
-            tipsCard.topAnchor.constraint(equalTo: previousButton.bottomAnchor, constant: 16),
+            // Tips card - below done button
+            tipsCard.topAnchor.constraint(equalTo: doneButton.bottomAnchor, constant: 16),
             tipsCard.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             tipsCard.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             tipsCard.bottomAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
             
-            // Tips header button (invisible overlay)
+            // Tips header button
             tipsHeaderButton.topAnchor.constraint(equalTo: tipsCard.topAnchor),
             tipsHeaderButton.leadingAnchor.constraint(equalTo: tipsCard.leadingAnchor),
             tipsHeaderButton.trailingAnchor.constraint(equalTo: tipsCard.trailingAnchor),
-            tipsHeaderButton.heightAnchor.constraint(equalToConstant: 48),
+            tipsHeaderButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
             
             // Tips label
             tipsLabel.centerYAnchor.constraint(equalTo: tipsHeaderButton.centerYAnchor),
@@ -221,7 +206,7 @@ class PracticeView: UIView {
             tipsContentView.topAnchor.constraint(equalTo: tipsHeaderButton.bottomAnchor),
             tipsContentView.leadingAnchor.constraint(equalTo: tipsCard.leadingAnchor, constant: 16),
             tipsContentView.trailingAnchor.constraint(equalTo: tipsCard.trailingAnchor, constant: -16),
-            tipsContentView.bottomAnchor.constraint(equalTo: tipsCard.bottomAnchor, constant: -8),
+            tipsContentView.bottomAnchor.constraint(equalTo: tipsCard.bottomAnchor, constant: -12),
             tipsContentHeightConstraint,
             
             // Tips text view
@@ -237,7 +222,6 @@ class PracticeView: UIView {
     func configure(with lesson: PracticeLesson) {
         lessonImageView.image = UIImage(named: lesson.imageName)
         tipsTextView.text = lesson.tips
-        progressLabel.text = "Progress: \(lesson.currentStep)/\(lesson.totalSteps)"
     }
     
     func toggleTips() {
@@ -245,8 +229,8 @@ class PracticeView: UIView {
         
         UIView.animate(withDuration: 0.3, animations: {
             if self.isExpanded {
-                // Expand to show content (150 points height for the text view)
-                self.tipsContentHeightConstraint.constant = 150
+                // Expand to show content - more height for more info
+                self.tipsContentHeightConstraint.constant = 180
                 self.tipsChevronIcon.transform = CGAffineTransform(rotationAngle: .pi)
             } else {
                 // Collapse to hide content
