@@ -16,6 +16,8 @@ class HomeViewController: UIViewController {
     var favoritesList: [String] = []
     var currentUser:FirebaseAuth.User?
     
+    // Store the listener so we can remove it later
+    private var favoritesListener: ListenerRegistration?
     
     override func loadView() {
         view = homeScreen
@@ -33,9 +35,48 @@ class HomeViewController: UIViewController {
         
         homeScreen.setAccountTarget(self, action: #selector(openProfile))
         homeScreen.backBtn.addTarget(self, action: #selector(backBtnTapped), for: .touchUpInside)
-        fetchUserFavorites()
+        
+        // Setup real-time listener for favorites
+        setupFavoritesListener()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Remove listener when leaving screen to avoid memory leaks
+        if isMovingFromParent {
+            favoritesListener?.remove()
+        }
+    }
+    
+    func setupFavoritesListener() {
+        guard let email = Auth.auth().currentUser?.email else { return }
+        
+        // Listen for real-time changes to favorites
+        favoritesListener = database.collection("users")
+            .document(email)
+            .addSnapshotListener { [weak self] snapshot, error in
+                guard let self = self else { return }
+                
+                if let error = error {
+                    print("Error listening to favorites: \(error.localizedDescription)")
+                    return
+                }
+                
+                if let data = snapshot?.data(),
+                   let favs = data["favoriteLessons"] as? [String] {
+                    print("Favorites updated: \(favs)")
+                    self.favoritesList = favs
+                    self.homeScreen.collectionViewLessons.reloadData()
+                } else {
+                    print("No favorites found")
+                    self.favoritesList = []
+                    self.homeScreen.collectionViewLessons.reloadData()
+                }
+            }
+    }
+    
+    // DEPRECATED - No longer needed, using setupFavoritesListener instead
     func fetchUserFavorites() {
         guard let email = Auth.auth().currentUser?.email else { return }
 
@@ -107,7 +148,13 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
 
         database.collection("users").document(email).updateData([
             "favoriteLessons": FieldValue.arrayUnion([title])
-        ])
+        ]) { error in
+            if let error = error {
+                print("Error adding favorite: \(error.localizedDescription)")
+            } else {
+                print("Added to favorites: \(title)")
+            }
+        }
     }
 
     func removeFavorite(title: String) {
@@ -115,7 +162,13 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
 
         database.collection("users").document(email).updateData([
             "favoriteLessons": FieldValue.arrayRemove([title])
-        ])
+        ]) { error in
+            if let error = error {
+                print("Error removing favorite: \(error.localizedDescription)")
+            } else {
+                print("Removed from favorites: \(title)")
+            }
+        }
     }
     
     //MARK: selecting a lesson

@@ -121,7 +121,7 @@ class PracticeViewController: UIViewController {
         print("🔷 Done button tapped!")
         
         guard var lesson = lesson else {
-            print("❌ No lesson found!")
+            print("No lesson found!")
             return
         }
         
@@ -130,7 +130,7 @@ class PracticeViewController: UIViewController {
         lesson.progressPercentage = 100
         
         saveLessonProgressToFirestore(lesson) { [weak self] success in
-            print("🔷 Save result: \(success ? "SUCCESS ✅" : "FAILED ❌")")
+            print("🔷 Save result: \(success ? "SUCCESS" : "FAILED")")
             
             if success {
                 self?.lesson = lesson
@@ -210,7 +210,7 @@ class PracticeViewController: UIViewController {
             print("🔷 Continue button tapped in alert")
             
             guard let navigationController = self?.navigationController else {
-                print("❌ No navigation controller!")
+                print("No navigation controller!")
                 return
             }
             
@@ -220,17 +220,16 @@ class PracticeViewController: UIViewController {
             if viewControllers.count >= 3 {
                 // Pop to the lesson library (third from top)
                 let targetVC = viewControllers[viewControllers.count - 3]
-                print("✅ Popping to: \(type(of: targetVC))")
+                print("Popping to: \(type(of: targetVC))")
                 navigationController.popToViewController(targetVC, animated: true)
             } else {
                 // Fallback: just pop to previous screen if navigation stack is shallow
-                print("⚠️ Stack too shallow, popping one screen back")
                 navigationController.popViewController(animated: true)
             }
         })
         
         present(alert, animated: true)
-        print("✅ Alert presented")
+        print("Alert presented")
     }
     
     private func showErrorAlert() {

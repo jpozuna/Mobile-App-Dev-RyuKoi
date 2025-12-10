@@ -1,158 +1,161 @@
-//
-//  FavoritesView.swift
-//  Group6_RyuKoi
-//
-//  Created by Joshua Paulino Ozuna on 11/17/25.
-//
 import UIKit
 
 class FavoritesView: UIView {
     
-    // MARK: - UI Components
-    private let navBar: TopNavigationBarView = {
-        let navBar = TopNavigationBarView()
-        navBar.translatesAutoresizingMaskIntoConstraints = false
-        return navBar
-    }()
+    var navBar: TopNavigationBarView!
+    var collectionViewFavorites: UICollectionView!
+    var titleBackground: UIView!
+    var favoritesLabel: UILabel!
+    var subLabel: UILabel!
+    var emptyStateView: UIView!
+    var emptyStateLabel: UILabel!
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Favorites"
-        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        label.textColor = .label
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = 16
-        layout.minimumLineSpacing = 16
-        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(FavoriteCardCell.self, forCellWithReuseIdentifier: "FavoriteCardCell")
-        return collectionView
-    }()
-    
-    private let emptyStateView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.isHidden = true
-        return view
-    }()
-    
-    private let emptyStateImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "star.slash")
-        imageView.tintColor = .systemGray3
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    
-    private let emptyStateLabel: UILabel = {
-        let label = UILabel()
-        label.text = "No Favorites Yet"
-        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        label.textColor = .systemGray
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let emptyStateSubtitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Star your favorite lessons to find them here"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        label.textColor = .systemGray2
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupUI()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: - Setup
-    private func setupUI() {
         backgroundColor = UIColor(red: 1.0, green: 0.953, blue: 0.851, alpha: 1.0)
         
-        addSubview(navBar)
-        addSubview(titleLabel)
-        addSubview(collectionView)
-        addSubview(emptyStateView)
+        setupNavBar()
+        setupCollectionView()
+        setupRect()
+        setupLabels()
+        setupEmptyState()
         
-        emptyStateView.addSubview(emptyStateImageView)
-        emptyStateView.addSubview(emptyStateLabel)
-        emptyStateView.addSubview(emptyStateSubtitleLabel)
-        
-        setupConstraints()
+        initConstraints()
     }
     
-    private func setupConstraints() {
+    func setupNavBar() {
+        navBar = TopNavigationBarView()
+        navBar.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(navBar)
+    }
+    
+    func setupCollectionView() {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 8
+        layout.sectionInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        
+        collectionViewFavorites = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionViewFavorites.translatesAutoresizingMaskIntoConstraints = false
+        collectionViewFavorites.backgroundColor = .clear
+        collectionViewFavorites.register(FavoriteCardCell.self, forCellWithReuseIdentifier: FavoriteCardCell.identifier)
+        self.addSubview(collectionViewFavorites)
+    }
+    
+    func setupRect() {
+        titleBackground = UIView()
+        titleBackground.translatesAutoresizingMaskIntoConstraints = false
+        titleBackground.backgroundColor = UIColor(red: 0.72, green: 0.21, blue: 0.055, alpha: 0.67)
+        titleBackground.layer.cornerRadius = 12
+        self.addSubview(titleBackground)
+    }
+    
+    func setupLabels() {
+        favoritesLabel = UILabel()
+        favoritesLabel.text = "Favorites"
+        favoritesLabel.font = UIFont.systemFont(ofSize: 30)
+        favoritesLabel.textColor = .black
+        favoritesLabel.textAlignment = .center
+        favoritesLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(favoritesLabel)
+        
+        subLabel = UILabel()
+        subLabel.text = "Your saved lessons"
+        subLabel.font = UIFont.systemFont(ofSize: 16)
+        subLabel.textColor = .black
+        subLabel.textAlignment = .center
+        subLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(subLabel)
+    }
+    
+    func setupEmptyState() {
+        emptyStateView = UIView()
+        emptyStateView.translatesAutoresizingMaskIntoConstraints = false
+        emptyStateView.isHidden = true
+        self.addSubview(emptyStateView)
+        
+        let emptyIcon = UIImageView()
+        emptyIcon.image = UIImage(systemName: "star.slash")
+        emptyIcon.tintColor = .systemGray3
+        emptyIcon.contentMode = .scaleAspectFit
+        emptyIcon.translatesAutoresizingMaskIntoConstraints = false
+        emptyStateView.addSubview(emptyIcon)
+        
+        emptyStateLabel = UILabel()
+        emptyStateLabel.text = "No Favorites Yet"
+        emptyStateLabel.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        emptyStateLabel.textColor = .systemGray
+        emptyStateLabel.textAlignment = .center
+        emptyStateLabel.translatesAutoresizingMaskIntoConstraints = false
+        emptyStateView.addSubview(emptyStateLabel)
+        
+        let emptySubLabel = UILabel()
+        emptySubLabel.text = "Tap the star icon on lessons\nto add them to favorites"
+        emptySubLabel.font = UIFont.systemFont(ofSize: 16)
+        emptySubLabel.textColor = .systemGray2
+        emptySubLabel.textAlignment = .center
+        emptySubLabel.numberOfLines = 0
+        emptySubLabel.translatesAutoresizingMaskIntoConstraints = false
+        emptyStateView.addSubview(emptySubLabel)
+        
         NSLayoutConstraint.activate([
+            emptyStateView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            emptyStateView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            emptyStateView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
+            emptyStateView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
             
-            navBar.topAnchor.constraint(equalTo: self.topAnchor ,constant: 70),
+            emptyIcon.topAnchor.constraint(equalTo: emptyStateView.topAnchor),
+            emptyIcon.centerXAnchor.constraint(equalTo: emptyStateView.centerXAnchor),
+            emptyIcon.widthAnchor.constraint(equalToConstant: 80),
+            emptyIcon.heightAnchor.constraint(equalToConstant: 80),
+            
+            emptyStateLabel.topAnchor.constraint(equalTo: emptyIcon.bottomAnchor, constant: 20),
+            emptyStateLabel.leadingAnchor.constraint(equalTo: emptyStateView.leadingAnchor),
+            emptyStateLabel.trailingAnchor.constraint(equalTo: emptyStateView.trailingAnchor),
+            
+            emptySubLabel.topAnchor.constraint(equalTo: emptyStateLabel.bottomAnchor, constant: 8),
+            emptySubLabel.leadingAnchor.constraint(equalTo: emptyStateView.leadingAnchor),
+            emptySubLabel.trailingAnchor.constraint(equalTo: emptyStateView.trailingAnchor),
+            emptySubLabel.bottomAnchor.constraint(equalTo: emptyStateView.bottomAnchor)
+        ])
+    }
+    
+    func initConstraints() {
+        NSLayoutConstraint.activate([
+            navBar.topAnchor.constraint(equalTo: self.topAnchor, constant: 70),
             navBar.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             navBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             navBar.heightAnchor.constraint(equalToConstant: 60),
             
-            // Title Label
-            titleLabel.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            titleBackground.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 10),
+            titleBackground.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            titleBackground.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            titleBackground.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            titleBackground.heightAnchor.constraint(equalToConstant: 60),
             
-            // Collection View
-            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            favoritesLabel.centerXAnchor.constraint(equalTo: titleBackground.centerXAnchor),
+            favoritesLabel.centerYAnchor.constraint(equalTo: titleBackground.centerYAnchor),
             
-            // Empty State View
-            emptyStateView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            emptyStateView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -40),
-            emptyStateView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
-            emptyStateView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
+            subLabel.topAnchor.constraint(equalTo: titleBackground.bottomAnchor, constant: 8),
+            subLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
-            // Empty State Image
-            emptyStateImageView.topAnchor.constraint(equalTo: emptyStateView.topAnchor),
-            emptyStateImageView.centerXAnchor.constraint(equalTo: emptyStateView.centerXAnchor),
-            emptyStateImageView.widthAnchor.constraint(equalToConstant: 80),
-            emptyStateImageView.heightAnchor.constraint(equalToConstant: 80),
-            
-            // Empty State Label
-            emptyStateLabel.topAnchor.constraint(equalTo: emptyStateImageView.bottomAnchor, constant: 20),
-            emptyStateLabel.leadingAnchor.constraint(equalTo: emptyStateView.leadingAnchor),
-            emptyStateLabel.trailingAnchor.constraint(equalTo: emptyStateView.trailingAnchor),
-            
-            // Empty State Subtitle
-            emptyStateSubtitleLabel.topAnchor.constraint(equalTo: emptyStateLabel.bottomAnchor, constant: 8),
-            emptyStateSubtitleLabel.leadingAnchor.constraint(equalTo: emptyStateView.leadingAnchor),
-            emptyStateSubtitleLabel.trailingAnchor.constraint(equalTo: emptyStateView.trailingAnchor),
-            emptyStateSubtitleLabel.bottomAnchor.constraint(equalTo: emptyStateView.bottomAnchor)
+            collectionViewFavorites.topAnchor.constraint(equalTo: subLabel.bottomAnchor, constant: 10),
+            collectionViewFavorites.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 8),
+            collectionViewFavorites.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -8),
+            collectionViewFavorites.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -8)
         ])
     }
     
-    // MARK: - Public Methods
-    func showEmptyState(_ show: Bool) {
-        emptyStateView.isHidden = !show
-        collectionView.isHidden = show
+    func updateEmptyState(_ isEmpty: Bool) {
+        emptyStateView.isHidden = !isEmpty
+        collectionViewFavorites.isHidden = isEmpty
     }
     
     func setAccountTarget(_ target: Any?, action: Selector) {
         navBar.account.addTarget(target, action: action, for: .touchUpInside)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

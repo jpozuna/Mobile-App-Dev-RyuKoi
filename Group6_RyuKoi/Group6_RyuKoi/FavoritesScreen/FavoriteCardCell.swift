@@ -28,7 +28,7 @@ class FavoriteCardCell: UICollectionViewCell {
         return view
     }()
     
-    private let starIcon: UIImageView = {
+     let starIcon: UIImageView = {
         let imageView = UIImageView()
         imageView.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
         imageView.contentMode = .scaleAspectFit
