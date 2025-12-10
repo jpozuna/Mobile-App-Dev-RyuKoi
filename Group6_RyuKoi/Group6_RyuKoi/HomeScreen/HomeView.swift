@@ -49,8 +49,8 @@ class HomeView: UIView {
     func setupCollectionView(){
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = 12
-        layout.minimumLineSpacing = 12
+        layout.minimumInteritemSpacing = 8      // Middle gap
+        layout.sectionInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
         
         collectionViewLessons = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionViewLessons.translatesAutoresizingMaskIntoConstraints = false
@@ -84,7 +84,6 @@ class HomeView: UIView {
             backBtn.topAnchor.constraint(equalTo: self.topAnchor, constant: 80),
             backBtn.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             
-            //navBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor ,constant: 20),
             navBar.leadingAnchor.constraint(equalTo: backBtn.trailingAnchor),
             navBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             navBar.centerYAnchor.constraint(equalTo: backBtn.centerYAnchor),

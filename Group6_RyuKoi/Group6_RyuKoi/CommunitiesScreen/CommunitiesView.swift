@@ -51,8 +51,11 @@ class CommunitiesView: UIView {
     func setupCollectionView(){
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
+        /*
         layout.minimumInteritemSpacing = 12
-        layout.minimumLineSpacing = 12
+        layout.minimumLineSpacing = 12*/
+        layout.minimumInteritemSpacing = 8      // Middle gap
+        layout.sectionInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
         
         collectionViewEvents = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionViewEvents.translatesAutoresizingMaskIntoConstraints = false
@@ -94,14 +97,6 @@ class CommunitiesView: UIView {
     
     func initConstraints(){
         NSLayoutConstraint.activate([
-            /*
-            //MARK: contentWrapper constraints...
-            contentWrapper.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            contentWrapper.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-            contentWrapper.widthAnchor.constraint(equalTo:self.safeAreaLayoutGuide.widthAnchor),
-            contentWrapper.heightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.heightAnchor),
-            */
-            
             navBar.topAnchor.constraint(equalTo: self.topAnchor ,constant: 70),
             navBar.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             navBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),

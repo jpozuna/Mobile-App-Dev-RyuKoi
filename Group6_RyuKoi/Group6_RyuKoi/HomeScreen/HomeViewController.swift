@@ -4,9 +4,6 @@
 //
 //  Created by Allison Lee on 11/13/25.
 //
-//MARK: TODO
-// need to add ability to "heart" a lesson to add to favorites // changed some stuff with bottom nav bar??? dunno how it works.
-// need to change table view to grid view for lessons//favorites//communities
 
 import UIKit
 import FirebaseAuth
@@ -16,7 +13,7 @@ class HomeViewController: UIViewController {
     let homeScreen = HomeView()
     var receivedCategory: Categories?
     let database = Firestore.firestore()
-    var favoritesList: [Lesson] = []
+    var favoritesList: [String] = []
     var currentUser:FirebaseAuth.User?
     
     
@@ -36,6 +33,19 @@ class HomeViewController: UIViewController {
         
         homeScreen.setAccountTarget(self, action: #selector(openProfile))
         homeScreen.backBtn.addTarget(self, action: #selector(backBtnTapped), for: .touchUpInside)
+        fetchUserFavorites()
+    }
+    
+    func fetchUserFavorites() {
+        guard let email = Auth.auth().currentUser?.email else { return }
+
+        database.collection("users").document(email).getDocument { snapshot, error in
+            if let data = snapshot?.data(),
+               let favs = data["favoriteLessons"] as? [String] {
+                self.favoritesList = favs
+                self.homeScreen.collectionViewLessons.reloadData()
+            }
+        }
     }
     
     @objc func openProfile() {
@@ -56,52 +66,59 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "HomeLessonCell",
             for: indexPath
         ) as! HomeLessonCell
-        
+
         let lesson = receivedCategory!.lesson[indexPath.row]
-        cell.configure(with: lesson)
+        let isFavorited = favoritesList.contains(lesson.title)
+        cell.configure(with: lesson, isFavorited: isFavorited)
+        
+        // registering if star is tapped
         cell.starIcon.tag = indexPath.row
+        cell.starIcon.isSelected = isFavorited
         cell.starIcon.addTarget(self, action: #selector(handleStarTapped(_:)), for: .touchUpInside)
+        
         return cell
     }
     
     @objc func handleStarTapped(_ sender: UIButton) {
         let row = sender.tag
-        guard let lesson = receivedCategory?.lesson[row] else { return }
-        
-        // Toggle the button state
+        let lesson = receivedCategory!.lesson[row]
+
         sender.isSelected.toggle()
-                    
-        // Update button image
+
         if sender.isSelected {
             sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
-            favoritesList.append(receivedCategory!.lesson[row])
-            updateFavoritesToUser()
-            
+            addFavorite(title: lesson.title)
         } else {
             sender.setImage(UIImage(systemName: "star"), for: .normal)
+            removeFavorite(title: lesson.title)
         }
     }
     
-    func updateFavoritesToUser() {
-        guard let currentUserEmail = Auth.auth().currentUser?.email else { return }
-            
-        database.collection("users")
-            .document(currentUserEmail)
-            .updateData([
-                "favoriteLessons": FieldValue.arrayUnion([favoritesList])
-            ]) { error in
-                if let error = error {
-                    print("Failed to update favorites")
-                } else {
-                    print("updated fav")
-                }
-        }
+    //MARK: Favorite lessons updated
+    //this is done via adding the lesson title as a string to the user's favoriteLessons array
+    
+    func addFavorite(title: String) {
+        guard let email = Auth.auth().currentUser?.email else { return }
+
+        database.collection("users").document(email).updateData([
+            "favoriteLessons": FieldValue.arrayUnion([title])
+        ])
+    }
+
+    func removeFavorite(title: String) {
+        guard let email = Auth.auth().currentUser?.email else { return }
+
+        database.collection("users").document(email).updateData([
+            "favoriteLessons": FieldValue.arrayRemove([title])
+        ])
     }
     
+    //MARK: selecting a lesson
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let lessonViewController = LessonViewController()
         let selectedLesson = receivedCategory?.lesson[indexPath.row]
@@ -109,12 +126,16 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         navigationController?.pushViewController(lessonViewController, animated: true)
     }
     
+    //MARK: lesson cell layout
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let spacing: CGFloat = 12
-        let totalSpacing = spacing * 3
+        let layout = collectionViewLayout as! UICollectionViewFlowLayout
+        let insets = layout.sectionInset
+        let spacing = layout.minimumInteritemSpacing
+        
+        let totalSpacing = insets.left + insets.right + spacing
         let width = (collectionView.bounds.width - totalSpacing) / 2
         
         return CGSize(width: width, height: 150)

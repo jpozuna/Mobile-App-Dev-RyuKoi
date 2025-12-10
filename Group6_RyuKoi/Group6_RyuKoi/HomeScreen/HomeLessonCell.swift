@@ -8,12 +8,11 @@
 import UIKit
 
 class HomeLessonCell: UICollectionViewCell {
-    
     // MARK: - Public Properties
-    
+    /*
     var lesson: Lesson? {
         didSet { configure(with: lesson) }
-    }
+    }*/
     
     static let identifier = "HomeLessonCell"
     
@@ -27,14 +26,6 @@ class HomeLessonCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    /*
-    public let starIcon: UIImageView = {
-        let iv = UIImageView()
-        iv.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
-        iv.contentMode = .scaleAspectFit
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
-    }()*/
     
     public let starIcon: UIButton = {
         let iv = UIButton()
@@ -46,7 +37,7 @@ class HomeLessonCell: UICollectionViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         label.textColor = .label
         label.textAlignment = .center
         label.numberOfLines = 2
@@ -131,67 +122,64 @@ class HomeLessonCell: UICollectionViewCell {
         lessonView.addSubview(progressLabel)
     }
     
-    
     private func setupConstraints() {
-        
+
         progressBarFillWidthConstraint = progressBarFill.widthAnchor.constraint(equalToConstant: 0)
-        
+
         NSLayoutConstraint.activate([
-            
+
             // Lesson container
             lessonView.topAnchor.constraint(equalTo: contentView.topAnchor),
             lessonView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             lessonView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             lessonView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
+
             // Star icon
             starIcon.topAnchor.constraint(equalTo: lessonView.topAnchor, constant: 12),
             starIcon.trailingAnchor.constraint(equalTo: lessonView.trailingAnchor, constant: -12),
             starIcon.widthAnchor.constraint(equalToConstant: 28),
             starIcon.heightAnchor.constraint(equalToConstant: 28),
-            
+
             // Title
-            titleLabel.topAnchor.constraint(equalTo: starIcon.bottomAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: starIcon.bottomAnchor, constant: 12),
             titleLabel.leadingAnchor.constraint(equalTo: lessonView.leadingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: lessonView.trailingAnchor, constant: -12),
-            
-            // Progress background
-            progressBarBackground.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
+
+            // Progress bar background
+            progressBarBackground.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 14),
             progressBarBackground.leadingAnchor.constraint(equalTo: lessonView.leadingAnchor, constant: 16),
             progressBarBackground.trailingAnchor.constraint(equalTo: lessonView.trailingAnchor, constant: -16),
-            progressBarBackground.heightAnchor.constraint(equalToConstant: 8),
-            
+            progressBarBackground.heightAnchor.constraint(equalToConstant: 10),
+
             // Progress fill
-            progressBarFill.topAnchor.constraint(equalTo: progressBarBackground.topAnchor),
             progressBarFill.leadingAnchor.constraint(equalTo: progressBarBackground.leadingAnchor),
+            progressBarFill.topAnchor.constraint(equalTo: progressBarBackground.topAnchor),
             progressBarFill.bottomAnchor.constraint(equalTo: progressBarBackground.bottomAnchor),
             progressBarFillWidthConstraint!,
-            
+
             // Progress label
-            progressLabel.topAnchor.constraint(equalTo: progressBarBackground.bottomAnchor, constant: 8),
+            progressLabel.topAnchor.constraint(equalTo: progressBarBackground.bottomAnchor, constant: 10),
             progressLabel.centerXAnchor.constraint(equalTo: lessonView.centerXAnchor),
-            progressLabel.bottomAnchor.constraint(lessThanOrEqualTo: lessonView.bottomAnchor, constant: -12)
+            progressLabel.bottomAnchor.constraint(equalTo: lessonView.bottomAnchor, constant: -12)
         ])
     }
     
-    
     // MARK: - Config
-    
-    func configure(with lesson: Lesson?) {
-        guard let lesson = lesson else { return }
-        
-        currentLesson = lesson
-        
+    func configure(with lesson: Lesson, isFavorited: Bool) {
         titleLabel.text = lesson.title
         progressLabel.text = "\(lesson.progressPercentage)% Complete"
-        
-        // Star icon depends on favorite
-        starIcon.setImage(UIImage(systemName: "star"), for: .normal)
-        starIcon.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
-        
+
+        if isFavorited {
+            starIcon.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            starIcon.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
+        } else {
+            starIcon.setImage(UIImage(systemName: "star"), for: .normal)
+            starIcon.tintColor = UIColor(red: 59/255, green: 9/255, blue: 24/255, alpha: 1.0)
+        }
+
         updateProgress(percentage: lesson.progressPercentage, animated: true)
     }
-    
+
     
     // MARK: - Progress Bar
     
