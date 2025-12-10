@@ -15,9 +15,9 @@ class HomeViewController: UIViewController {
     let database = Firestore.firestore()
     var favoritesList: [String] = []
     var currentUser:FirebaseAuth.User?
+    var filteredLessons = [Lesson]()
     
-    // Store the listener so we can remove it later
-    private var favoritesListener: ListenerRegistration?
+    
     
     override func loadView() {
         view = homeScreen
@@ -29,57 +29,31 @@ class HomeViewController: UIViewController {
         
         homeScreen.categoryLabel.text = receivedCategory?.name.rawValue
         
+        filteredLessons = receivedCategory?.lesson ?? []
+        
+        
         //MARK: patching the table view delegate and datasource to controller...
         homeScreen.collectionViewLessons.delegate = self
         homeScreen.collectionViewLessons.dataSource = self
         
+        homeScreen.navBar.searchBar.isEnabled = true
+        homeScreen.navBar.searchBar.delegate = self
+        
+        homeScreen.tableViewSearchResults.delegate = self
+        homeScreen.tableViewSearchResults.dataSource = self
+        homeScreen.tableViewSearchResults.backgroundColor = UIColor.clear
+        homeScreen.tableViewSearchResults.separatorStyle = .none
+
+        
+        
         homeScreen.setAccountTarget(self, action: #selector(openProfile))
         homeScreen.backBtn.addTarget(self, action: #selector(backBtnTapped), for: .touchUpInside)
-        
-        // Setup real-time listener for favorites
-        setupFavoritesListener()
+        fetchUserFavorites()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        // Remove listener when leaving screen to avoid memory leaks
-        if isMovingFromParent {
-            favoritesListener?.remove()
-        }
-    }
-    
-    func setupFavoritesListener() {
-        guard let email = Auth.auth().currentUser?.email else { return }
-        
-        // Listen for real-time changes to favorites
-        favoritesListener = database.collection("users")
-            .document(email)
-            .addSnapshotListener { [weak self] snapshot, error in
-                guard let self = self else { return }
-                
-                if let error = error {
-                    print("Error listening to favorites: \(error.localizedDescription)")
-                    return
-                }
-                
-                if let data = snapshot?.data(),
-                   let favs = data["favoriteLessons"] as? [String] {
-                    print("Favorites updated: \(favs)")
-                    self.favoritesList = favs
-                    self.homeScreen.collectionViewLessons.reloadData()
-                } else {
-                    print("No favorites found")
-                    self.favoritesList = []
-                    self.homeScreen.collectionViewLessons.reloadData()
-                }
-            }
-    }
-    
-    // DEPRECATED - No longer needed, using setupFavoritesListener instead
     func fetchUserFavorites() {
         guard let email = Auth.auth().currentUser?.email else { return }
-
+        
         database.collection("users").document(email).getDocument { snapshot, error in
             if let data = snapshot?.data(),
                let favs = data["favoriteLessons"] as? [String] {
@@ -107,12 +81,12 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+        
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "HomeLessonCell",
             for: indexPath
         ) as! HomeLessonCell
-
+        
         let lesson = receivedCategory!.lesson[indexPath.row]
         let isFavorited = favoritesList.contains(lesson.title)
         cell.configure(with: lesson, isFavorited: isFavorited)
@@ -128,9 +102,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     @objc func handleStarTapped(_ sender: UIButton) {
         let row = sender.tag
         let lesson = receivedCategory!.lesson[row]
-
+        
         sender.isSelected.toggle()
-
+        
         if sender.isSelected {
             sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
             addFavorite(title: lesson.title)
@@ -145,30 +119,18 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func addFavorite(title: String) {
         guard let email = Auth.auth().currentUser?.email else { return }
-
+        
         database.collection("users").document(email).updateData([
             "favoriteLessons": FieldValue.arrayUnion([title])
-        ]) { error in
-            if let error = error {
-                print("Error adding favorite: \(error.localizedDescription)")
-            } else {
-                print("Added to favorites: \(title)")
-            }
-        }
+        ])
     }
-
+    
     func removeFavorite(title: String) {
         guard let email = Auth.auth().currentUser?.email else { return }
-
+        
         database.collection("users").document(email).updateData([
             "favoriteLessons": FieldValue.arrayRemove([title])
-        ]) { error in
-            if let error = error {
-                print("Error removing favorite: \(error.localizedDescription)")
-            } else {
-                print("Removed from favorites: \(title)")
-            }
-        }
+        ])
     }
     
     //MARK: selecting a lesson
@@ -192,5 +154,48 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let width = (collectionView.bounds.width - totalSpacing) / 2
         
         return CGSize(width: width, height: 150)
+    }
+}
+
+
+extension HomeViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let allLessons = receivedCategory?.lesson else { return }
+        
+        if searchText.isEmpty {
+            filteredLessons = allLessons
+            homeScreen.tableViewSearchResults.isHidden = true
+        } else {
+            filteredLessons = allLessons.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+            homeScreen.tableViewSearchResults.isHidden = false
+        }
+        homeScreen.tableViewSearchResults.reloadData()
+    }
+}
+
+extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return filteredLessons.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: SearchTableViewCell.identifier,
+            for: indexPath
+        ) as! SearchTableViewCell
+
+        let lesson = filteredLessons[indexPath.row]
+        let isFavorited = favoritesList.contains(lesson.title)
+        cell.configure(with: lesson,)
+
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let lessonViewController = LessonViewController()
+        lessonViewController.selectedLesson = filteredLessons[indexPath.row]
+        navigationController?.pushViewController(lessonViewController, animated: true)
     }
 }

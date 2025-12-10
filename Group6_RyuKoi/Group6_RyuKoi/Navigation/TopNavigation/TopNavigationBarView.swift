@@ -39,6 +39,7 @@ class TopNavigationBarView: UIView {
         searchBar.searchTextField.backgroundColor = UIColor(red: 1.0, green: 248/255, blue: 232/255, alpha: 1.0)
         searchBar.searchTextField.layer.cornerRadius = 20
         searchBar.searchTextField.clipsToBounds = true
+        searchBar.isEnabled = false
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         addSubview(searchBar)
     }

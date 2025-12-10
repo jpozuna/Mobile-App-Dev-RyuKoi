@@ -10,6 +10,8 @@ import UIKit
 class HomeView: UIView {
     var backBtn: UIButton!
     var navBar: TopNavigationBarView!
+    var tableViewSearchResults: UITableView!
+    
     
     //MARK: collectionView for lessons...
     var collectionViewLessons: UICollectionView!
@@ -27,7 +29,8 @@ class HomeView: UIView {
         setupRect()
         categoryLabel = setupLabel("Taekwondo", 30)
         subLabel = setupLabel("Lesson journey", 16)
-                
+        setupSearchResultsTableView()
+        
         initConstraints()
     }
     
@@ -38,6 +41,16 @@ class HomeView: UIView {
         backBtn.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(backBtn)
     }
+    
+    func setupSearchResultsTableView() {
+        tableViewSearchResults = UITableView()
+        tableViewSearchResults.translatesAutoresizingMaskIntoConstraints = false
+        tableViewSearchResults.isHidden = true
+        tableViewSearchResults.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.identifier)
+        addSubview(tableViewSearchResults)
+        bringSubviewToFront(tableViewSearchResults)
+    }
+    
     
     func setupNavBar() {
         navBar = TopNavigationBarView()
@@ -107,7 +120,12 @@ class HomeView: UIView {
             collectionViewLessons.topAnchor.constraint(equalTo: subLabel.bottomAnchor, constant: 10),
             collectionViewLessons.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
             collectionViewLessons.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8),
-            collectionViewLessons.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -8)
+            collectionViewLessons.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -8),
+            
+            tableViewSearchResults.topAnchor.constraint(equalTo: navBar.searchBar.bottomAnchor, constant: 4),
+            tableViewSearchResults.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            tableViewSearchResults.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            tableViewSearchResults.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -8)
         ])
     }
     
@@ -120,3 +138,4 @@ class HomeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
