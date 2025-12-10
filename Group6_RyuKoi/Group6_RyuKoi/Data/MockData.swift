@@ -38,7 +38,7 @@ let mockCategories: [Categories] = [
                 title: "Essential Kicks",
                 description: "Master front kick, roundhouse, and side kick.",
                 progressState: .notStarted,
-                progressPercentage: 35,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Drive your knee upward before extending the kick.")
             ),
@@ -54,7 +54,7 @@ let mockCategories: [Categories] = [
                 title: "Poomsae Basics",
                 description: "Perform the first Taekwondo form (Taegeuk Il Jang).",
                 progressState: .notStarted,
-                progressPercentage: 100,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Focus on rhythm and breathing.")
             )
@@ -79,7 +79,7 @@ let mockCategories: [Categories] = [
                 title: "Stances Training",
                 description: "Practice front stance, horse stance, and back stance.",
                 progressState: .notStarted,
-                progressPercentage: 20,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Distribute weight properly across both feet.")
             ),
@@ -95,7 +95,7 @@ let mockCategories: [Categories] = [
                 title: "Kata Introduction",
                 description: "Learn Taikyoku Shodan, the first kata.",
                 progressState: .notStarted,
-                progressPercentage: 10,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Maintain strong stances throughout.")
             ),
@@ -103,7 +103,7 @@ let mockCategories: [Categories] = [
                 title: "Self-Defense Basics",
                 description: "Introduction to distance, timing, and awareness.",
                 progressState: .notStarted,
-                progressPercentage: 100,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "React calmly and move off the attack line.")
             )
@@ -120,7 +120,7 @@ let mockCategories: [Categories] = [
                 title: "Boxing Stance",
                 description: "Learn balance, guard position, and mobility.",
                 progressState: .notStarted,
-                progressPercentage: 100,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Stay light on your toes.")
             ),
@@ -136,7 +136,7 @@ let mockCategories: [Categories] = [
                 title: "Fundamental Punches",
                 description: "Master jab, cross, hook, and uppercut.",
                 progressState: .notStarted,
-                progressPercentage: 50,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Twist your hips with each punch.")
             ),
@@ -160,7 +160,7 @@ let mockCategories: [Categories] = [
                 title: "Heavy Bag Training",
                 description: "Develop power, endurance, and timing.",
                 progressState: .notStarted,
-                progressPercentage: 15,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Don't push the bag—snap your punches."
                 )
@@ -186,7 +186,7 @@ let mockCategories: [Categories] = [
                 title: "Basic Grips",
                 description: "Learn sleeve grip, collar grip, and overhooks.",
                 progressState: .notStarted,
-                progressPercentage: 100,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Stay relaxed—do not squeeze too hard.")
             ),
@@ -194,7 +194,7 @@ let mockCategories: [Categories] = [
                 title: "Joint Locks",
                 description: "Practice wrist locks, elbow locks, and control holds.",
                 progressState: .notStarted,
-                progressPercentage: 25,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Use leverage, not strength.")
             ),
@@ -202,7 +202,7 @@ let mockCategories: [Categories] = [
                 title: "Throws Introduction",
                 description: "Learn hip toss, foot sweep, and shoulder throw.",
                 progressState: .notStarted,
-                progressPercentage: 40,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Break opponent balance (kuzushi) first.")
             ),
@@ -227,7 +227,7 @@ let mockCategories: [Categories] = [
                 title: "Meditation Basics",
                 description: "Breathing and focus techniques.",
                 progressState: .notStarted,
-                progressPercentage: 100,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Relax your jaw and breathe naturally.")
             ),
@@ -243,7 +243,7 @@ let mockCategories: [Categories] = [
                 title: "Strength Training",
                 description: "Bodyweight exercises for martial artists.",
                 progressState: .notStarted,
-                progressPercentage: 30,
+                progressPercentage: 0,
                 practice: Practice(PracticeMove: placeholderImageData,
                     tips: "Maintain proper form over speed.")
             ),
