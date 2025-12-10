@@ -5,13 +5,14 @@
 //  Created by Allison Lee on 11/13/25.
 //
 //MARK: TODO
-// need to add plus button to event title label later...
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 class CommunitiesViewController: UIViewController {
     let communitiesScreen = CommunitiesView()
+    var currentUser:FirebaseAuth.User?
     let database = Firestore.firestore()
     var eventsList: [Event] = []
     
@@ -51,7 +52,6 @@ class CommunitiesViewController: UIViewController {
         let addEventScreen = AddEventViewController()
         navigationController?.pushViewController(addEventScreen, animated: true)
     }
-    
 }
 
 extension CommunitiesViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -61,22 +61,62 @@ extension CommunitiesViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CommunitiesEventCell.identifier, for: indexPath) as! CommunitiesEventCell
-        cell.eventLabel.text = eventsList[indexPath.item].name
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier:CommunitiesEventCell.identifier,
+            for: indexPath
+        ) as! CommunitiesEventCell
+
+        let event = eventsList[indexPath.row]
+        //let isFavorited = favoritesList.contains(lesson.title)
+        cell.configure(with: event)
+        
+        // registering if notif is tapped
+        cell.notifIcon.tag = indexPath.row
+        cell.notifIcon.addTarget(self, action: #selector(getNotification(_:)), for: .touchUpInside)
+        
         return cell
+    }
+    
+    @objc func getNotification(_ sender: UIButton) {
+        let row = sender.tag
+        let event = eventsList[row]
+        
+        guard let user = Auth.auth().currentUser else { return }
+        
+        let userEmail = user.email ?? ""
+        
+        database.collection("event")
+            .document(event.name)
+            .updateData([
+                "followers": FieldValue.arrayUnion([userEmail])
+            ]) { error in
+                if let error = error {
+                    print("Error following event: \(error)")
+                } else {
+                    print("User will now receive notifications for this event.")
+                    self.showDropdownAlert(message: "You are now following this event!")
+                }
+            }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let eventScreen = CommunityViewController()
         eventScreen.selectedEvent = eventsList[indexPath.item]
         navigationController?.pushViewController(eventScreen, animated: true)
-        // You can handle favorite toggles here or push to lesson detail
     }
     
+    //MARK: cell layout
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.frame.width - 12) / 2 // 2 columns
-        return CGSize(width: width, height: width)
+        
+        let layout = collectionViewLayout as! UICollectionViewFlowLayout
+        let insets = layout.sectionInset
+        let spacing = layout.minimumInteritemSpacing
+        
+        let totalSpacing = insets.left + insets.right + spacing
+        let width = (collectionView.bounds.width - totalSpacing) / 2
+        
+        return CGSize(width: width, height: 150)
     }
 }
